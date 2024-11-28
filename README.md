@@ -25,38 +25,39 @@ It is designed to compile with a C++17 or C++20 compiler.
 
 Example code:
 
- #include <asx/sysclock.hpp>
- #include <asx/uart.hpp>
- #include <asx/reactor.hpp>
- #include <asx/ioport.hpp>
- #include <chrono>
+```C++
+  #include <asx/sysclock.hpp>
+  #include <asx/reactor.hpp>
+  #include <asx/ioport.hpp>
+  #include <chrono>
 
- using namespace asx;
+  using namespace asx;
 
- namespace {
-   using namespace asx::sysclock;
-   using sysclock = sysclock<20MHz>;
- }
+  namespace {
+     using namespace asx::sysclock;
+     using sysclock = sysclock<20MHz>;
+  }
  
- namespace {
-   using namespace asx::ioport;
-   auto led1 = ioport<A, 2, output | pullup>{0};
- }
+  namespace {
+     using namespace asx::ioport;
+     auto led1 = ioport<A, 2, output | pullup>{0};
+  }
 
- auto flash_led() -> void {
-   led1.toggle();
- }
+  auto flash_led() -> void {
+     led1.toggle();
+  }
   
- auto main() -> int {
-   using namespace std::chrono;
-   sysclock::init();
-   reactor::init();
+  auto main() -> int {
+     using namespace std::chrono;
+     sysclock::init();
+     reactor::init();
 
-   reactor.bind(flash_led).repeat(1s);
+     reactor.bind(flash_led).repeat(1s);
 
-   reactor::run();
- }
-   
+     reactor::run();
+  }
+```
+  
    
     
   
