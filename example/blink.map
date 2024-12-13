@@ -1,0 +1,766 @@
+Archive member included to satisfy reference by file (symbol)
+
+/opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+                              /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o (exit)
+/opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+                              Debug/./src/timer.o (__do_copy_data)
+/opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+                              Debug/./src/timer.o (__do_clear_bss)
+/opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+                              Debug/./src/reactor.o (__ctzsi2)
+/opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+                              /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o) (__ffssi2)
+/opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+                              /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o) (__loop_ffsqi2)
+
+Discarded input sections
+
+ .data          0x00000000        0x0 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ .bss           0x00000000        0x0 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ .text          0x00000000        0x0 Debug/./src/builtin.o
+ .data          0x00000000        0x0 Debug/./src/builtin.o
+ .bss           0x00000000        0x0 Debug/./src/builtin.o
+ .rodata.__cxa_pure_virtual.str1.1
+                0x00000000       0x13 Debug/./src/builtin.o
+ .text.__cxa_pure_virtual
+                0x00000000        0xe Debug/./src/builtin.o
+ .debug_info    0x00000000       0xa7 Debug/./src/builtin.o
+ .debug_abbrev  0x00000000       0x88 Debug/./src/builtin.o
+ .debug_aranges
+                0x00000000       0x20 Debug/./src/builtin.o
+ .debug_ranges  0x00000000       0x10 Debug/./src/builtin.o
+ .debug_line    0x00000000       0x62 Debug/./src/builtin.o
+ .debug_str     0x00000000      0x18b Debug/./src/builtin.o
+ .comment       0x00000000       0x13 Debug/./src/builtin.o
+ .debug_frame   0x00000000       0x24 Debug/./src/builtin.o
+ .text          0x00000000        0x0 Debug/./src/_ccp.o
+ .data          0x00000000        0x0 Debug/./src/_ccp.o
+ .bss           0x00000000        0x0 Debug/./src/_ccp.o
+ .text          0x00000000        0x0 Debug/./src/sysclk.o
+ .data          0x00000000        0x0 Debug/./src/sysclk.o
+ .bss           0x00000000        0x0 Debug/./src/sysclk.o
+ .text          0x00000000        0x0 Debug/./src/timer.o
+ .data          0x00000000        0x0 Debug/./src/timer.o
+ .bss           0x00000000        0x0 Debug/./src/timer.o
+ .text.timer_get_count_from_now
+                0x00000000       0x22 Debug/./src/timer.o
+ .text.timer_time_lapsed_since
+                0x00000000       0x22 Debug/./src/timer.o
+ .text.timer_cancel
+                0x00000000       0xe0 Debug/./src/timer.o
+ .text          0x00000000        0x0 Debug/./src/alert.o
+ .data          0x00000000        0x0 Debug/./src/alert.o
+ .bss           0x00000000        0x0 Debug/./src/alert.o
+ .text.alert_init
+                0x00000000        0x8 Debug/./src/alert.o
+ .text          0x00000000        0x0 Debug/./src/reactor.o
+ .data          0x00000000        0x0 Debug/./src/reactor.o
+ .bss           0x00000000        0x0 Debug/./src/reactor.o
+ .text.reactor_clear
+                0x00000000       0x3e Debug/./src/reactor.o
+ .text          0x00000000        0x0 Debug/blink.o
+ .data          0x00000000        0x0 Debug/blink.o
+ .bss           0x00000000        0x0 Debug/blink.o
+ .text          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .data          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .bss           0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text.libgcc.mul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text.libgcc.div
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text.libgcc   0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .text          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .data          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .bss           0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text.libgcc.mul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text.libgcc.div
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .text          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .data          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .bss           0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text.libgcc.mul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text.libgcc.div
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .text          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .data          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .bss           0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .text.libgcc.mul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .text.libgcc.div
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .text.libgcc   0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .text          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .data          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .bss           0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .text.libgcc.mul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .text.libgcc.div
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .text.libgcc   0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .text          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .data          0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .bss           0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .text.libgcc.mul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .text.libgcc.div
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .text.libgcc   0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00008000         xr
+data             0x00803400         0x00000c00         rw!x
+eeprom           0x00810000         0x00000100         rw!x
+fuse             0x00820000         0x0000000a         rw!x
+lock             0x00830000         0x00000400         rw!x
+signature        0x00840000         0x00000400         rw!x
+user_signatures  0x00850000         0x00000400         rw!x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x803400
+                0x00008000                        __RODATA_PM_OFFSET__ = 0x8000
+LOAD /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+START GROUP
+LOAD Debug/./src/builtin.o
+LOAD Debug/./src/_ccp.o
+LOAD Debug/./src/sysclk.o
+LOAD Debug/./src/timer.o
+LOAD Debug/./src/alert.o
+LOAD Debug/./src/reactor.o
+LOAD Debug/blink.o
+END GROUP
+START GROUP
+LOAD /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/../../../../avr/lib/avrxmega3/libm.a
+END GROUP
+LOAD /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a
+LOAD /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/../../../../avr/lib/avrxmega3/libm.a
+START GROUP
+LOAD /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a
+LOAD /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/../../../../avr/lib/avrxmega3/libm.a
+LOAD /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/../../../../avr/lib/avrxmega3/libc.a
+LOAD /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/libattiny3224.a
+END GROUP
+                [0x00000000]                      __TEXT_REGION_ORIGIN__ = DEFINED (__TEXT_REGION_ORIGIN__)?__TEXT_REGION_ORIGIN__:0x0
+                [0x00008000]                      __TEXT_REGION_LENGTH__ = DEFINED (__TEXT_REGION_LENGTH__)?__TEXT_REGION_LENGTH__:0x100000
+                [0x00803400]                      __DATA_REGION_ORIGIN__ = DEFINED (__DATA_REGION_ORIGIN__)?__DATA_REGION_ORIGIN__:0x802000
+                [0x00000c00]                      __DATA_REGION_LENGTH__ = DEFINED (__DATA_REGION_LENGTH__)?__DATA_REGION_LENGTH__:0xffa0
+                [0x00000100]                      __EEPROM_REGION_LENGTH__ = DEFINED (__EEPROM_REGION_LENGTH__)?__EEPROM_REGION_LENGTH__:0x10000
+                [0x0000000a]                      __FUSE_REGION_LENGTH__ = DEFINED (__FUSE_REGION_LENGTH__)?__FUSE_REGION_LENGTH__:0x400
+                0x00000400                        __LOCK_REGION_LENGTH__ = DEFINED (__LOCK_REGION_LENGTH__)?__LOCK_REGION_LENGTH__:0x400
+                0x00000400                        __SIGNATURE_REGION_LENGTH__ = DEFINED (__SIGNATURE_REGION_LENGTH__)?__SIGNATURE_REGION_LENGTH__:0x400
+                0x00000400                        __USER_SIGNATURE_REGION_LENGTH__ = DEFINED (__USER_SIGNATURE_REGION_LENGTH__)?__USER_SIGNATURE_REGION_LENGTH__:0x400
+                0x00008000                        __RODATA_PM_OFFSET__ = DEFINED (__RODATA_PM_OFFSET__)?__RODATA_PM_OFFSET__:0x8000
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000      0x6ae
+ *(.vectors)
+ .vectors       0x00000000       0x78 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+                0x00000078                        . = ALIGN (0x2)
+                0x00000078                        __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x00000078        0x0 linker stubs
+ *(.trampolines*)
+                0x00000078                        __trampolines_end = .
+ *libprintf_flt.a:*(.progmem.data)
+ *libc.a:*(.progmem.data)
+ *(.progmem.*)
+                0x00000078                        . = ALIGN (0x2)
+ *(.lowtext)
+ *(.lowtext*)
+                0x00000078                        __ctors_start = .
+ *(.ctors)
+                0x00000078                        __ctors_end = .
+                0x00000078                        __dtors_start = .
+ *(.dtors)
+                0x00000078                        __dtors_end = .
+ SORT_BY_NAME(*)(.ctors)
+ SORT_BY_NAME(*)(.dtors)
+ *(.init0)
+ .init0         0x00000078        0x0 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+                0x00000078                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x00000078        0xc /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x00000084       0x16 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+                0x00000084                __do_copy_data
+ .init4         0x0000009a       0x10 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+                0x0000009a                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x000000aa        0x8 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ *(.init9)
+ *(.text)
+ .text          0x000000b2        0x4 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+                0x000000b2                __vector_22
+                0x000000b2                __vector_28
+                0x000000b2                __vector_1
+                0x000000b2                __vector_24
+                0x000000b2                __vector_12
+                0x000000b2                __bad_interrupt
+                0x000000b2                __vector_6
+                0x000000b2                __vector_3
+                0x000000b2                __vector_23
+                0x000000b2                __vector_11
+                0x000000b2                __vector_13
+                0x000000b2                __vector_17
+                0x000000b2                __vector_19
+                0x000000b2                __vector_7
+                0x000000b2                __vector_27
+                0x000000b2                __vector_5
+                0x000000b2                __vector_4
+                0x000000b2                __vector_9
+                0x000000b2                __vector_2
+                0x000000b2                __vector_21
+                0x000000b2                __vector_15
+                0x000000b2                __vector_29
+                0x000000b2                __vector_8
+                0x000000b2                __vector_26
+                0x000000b2                __vector_14
+                0x000000b2                __vector_10
+                0x000000b2                __vector_16
+                0x000000b2                __vector_18
+                0x000000b2                __vector_20
+                0x000000b6                        . = ALIGN (0x2)
+ *(.text.*)
+ .text.ccp_write_io
+                0x000000b6        0xa Debug/./src/_ccp.o
+                0x000000b6                ccp_write_io
+ .text.sysclk_init
+                0x000000c0        0xa Debug/./src/sysclk.o
+                0x000000c0                sysclk_init
+ .text.timer_get_count
+                0x000000ca       0x2c Debug/./src/timer.o
+                0x000000ca                timer_get_count
+ .text.timer_init
+                0x000000f6       0x4a Debug/./src/timer.o
+                0x000000f6                timer_init
+ .text._timer_arm
+                0x00000140      0x1d0 Debug/./src/timer.o
+                0x00000140                _timer_arm
+ .text.timer_dispatch
+                0x00000310       0xdc Debug/./src/timer.o
+                0x00000310                timer_dispatch
+ .text.timer_arm
+                0x000003ec       0x30 Debug/./src/timer.o
+                0x000003ec                timer_arm
+ .text.__vector_25
+                0x0000041c       0x7c Debug/./src/timer.o
+                0x0000041c                __vector_25
+ .text.alert_record
+                0x00000498       0x4c Debug/./src/alert.o
+                0x00000498                alert_record
+ .text.reactor_init
+                0x000004e4        0xc Debug/./src/reactor.o
+                0x000004e4                reactor_init
+ .text.reactor_register
+                0x000004f0       0x44 Debug/./src/reactor.o
+                0x000004f0                reactor_register
+ .text.reactor_null_notify_from_isr
+                0x00000534       0x20 Debug/./src/reactor.o
+                0x00000534                reactor_null_notify_from_isr
+ .text.reactor_notify
+                0x00000554       0x38 Debug/./src/reactor.o
+                0x00000554                reactor_notify
+ .text.reactor_run
+                0x0000058c       0x9a Debug/./src/reactor.o
+                0x0000058c                reactor_run
+ .text._Z9flash_ledv
+                0x00000626        0xa Debug/blink.o
+                0x00000626                flash_led()
+ .text.startup.main
+                0x00000630       0x46 Debug/blink.o
+                0x00000630                main
+ .text.libgcc.builtins
+                0x00000676        0x8 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+                0x00000676                __ctzsi2
+ .text.libgcc.builtins
+                0x0000067e       0x20 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+                0x0000067e                __ffssi2
+ .text.libgcc.builtins
+                0x0000069e        0xc /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+                0x0000069e                __loop_ffsqi2
+                0x000006aa                        . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x000006aa        0x0 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+                0x000006aa                exit
+                0x000006aa                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x000006aa        0x4 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ *(.fini0)
+ *(.hightext)
+ *(.hightext*)
+ *(.progmemx.*)
+                0x000006ae                        . = ALIGN (0x2)
+ *(.jumptables)
+ *(.jumptables*)
+                0x000006ae                        _etext = .
+
+.rodata         0x000086ae       0x40 load address 0x000006ae
+ *(.rodata)
+ *(.rodata*)
+ .rodata._timer_arm.str1.1
+                0x000086ae       0x20 Debug/./src/timer.o
+                                  0xf (size before relaxing)
+ .rodata.reactor_register.str1.1
+                0x000086ce       0x11 Debug/./src/reactor.o
+ .rodata.bit_shift_table
+                0x000086ce       0x20 Debug/./src/reactor.o
+ *(.gnu.linkonce.r*)
+
+.data           0x00803400        0x4 load address 0x000006ee
+                0x00803400                        PROVIDE (__data_start = .)
+ *(.data)
+ *(.data*)
+ .data._timer_current_instance
+                0x00803400        0x4 Debug/./src/timer.o
+ *(.gnu.linkonce.d*)
+                0x00803404                        . = ALIGN (0x2)
+                0x00803404                        _edata = .
+                0x00803404                        PROVIDE (__data_end = .)
+
+.bss            0x00803404      0x17b
+                0x00803404                        PROVIDE (__bss_start = .)
+ *(.bss)
+ *(.bss*)
+ .bss._timer_reactor_handle
+                0x00803404        0x1 Debug/./src/timer.o
+ .bss._timer_slot_avail
+                0x00803405        0x1 Debug/./src/timer.o
+ .bss._timer_slot_active
+                0x00803406        0x1 Debug/./src/timer.o
+ .bss._timer_free_running_ms_counter
+                0x00803407        0x4 Debug/./src/timer.o
+ .bss._timer_future_sorted_list
+                0x0080340b       0xf0 Debug/./src/timer.o
+ .bss._reactor_notifications
+                0x008034fb        0x4 Debug/./src/reactor.o
+                0x008034fb                _reactor_notifications
+ .bss._handlers
+                0x008034ff       0x80 Debug/./src/reactor.o
+ *(COMMON)
+                0x0080357f                        PROVIDE (__bss_end = .)
+                0x000006ee                        __data_load_start = LOADADDR (.data)
+                0x000006f2                        __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x0080357f        0x0
+                [!provide]                        PROVIDE (__noinit_start = .)
+ *(.noinit .noinit.* .gnu.linkonce.n.*)
+                [!provide]                        PROVIDE (__noinit_end = .)
+                0x0080357f                        _end = .
+                [!provide]                        PROVIDE (__heap_start = .)
+                [!provide]                        PROVIDE (__flmap_init_label = DEFINED (__flmap_noinit_start)?__flmap_noinit_start:0x0)
+                [!provide]                        PROVIDE (__flmap = DEFINED (__flmap)?__flmap:0x0)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                        __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x12
+ *(.comment)
+ .comment       0x00000000       0x12 Debug/./src/sysclk.o
+                                 0x13 (size before relaxing)
+ .comment       0x00000012       0x13 Debug/./src/timer.o
+ .comment       0x00000012       0x13 Debug/./src/alert.o
+ .comment       0x00000012       0x13 Debug/./src/reactor.o
+ .comment       0x00000012       0x13 Debug/blink.o
+
+.note.gnu.avr.deviceinfo
+                0x00000000       0x40
+ .note.gnu.avr.deviceinfo
+                0x00000000       0x40 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+
+.gnu.build.attributes
+ *(.gnu.build.attributes .gnu.build.attributes.*)
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x1f8
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 Debug/./src/_ccp.o
+ .debug_aranges
+                0x00000020       0x20 Debug/./src/sysclk.o
+ .debug_aranges
+                0x00000040       0x60 Debug/./src/timer.o
+ .debug_aranges
+                0x000000a0       0x28 Debug/./src/alert.o
+ .debug_aranges
+                0x000000c8       0x48 Debug/./src/reactor.o
+ .debug_aranges
+                0x00000110       0x28 Debug/blink.o
+ .debug_aranges
+                0x00000138       0x20 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .debug_aranges
+                0x00000158       0x20 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .debug_aranges
+                0x00000178       0x20 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .debug_aranges
+                0x00000198       0x20 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .debug_aranges
+                0x000001b8       0x20 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .debug_aranges
+                0x000001d8       0x20 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000     0x5f1c
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000     0x1b84 /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ .debug_info    0x00001b84       0x35 Debug/./src/_ccp.o
+ .debug_info    0x00001bb9      0x278 Debug/./src/sysclk.o
+ .debug_info    0x00001e31      0xbbf Debug/./src/timer.o
+ .debug_info    0x000029f0      0x63d Debug/./src/alert.o
+ .debug_info    0x0000302d      0x4df Debug/./src/reactor.o
+ .debug_info    0x0000350c     0x2938 Debug/blink.o
+ .debug_info    0x00005e44       0x24 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .debug_info    0x00005e68       0x24 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .debug_info    0x00005e8c       0x24 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .debug_info    0x00005eb0       0x24 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .debug_info    0x00005ed4       0x24 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .debug_info    0x00005ef8       0x24 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+
+.debug_abbrev   0x00000000     0x2d3c
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000     0x1a0e /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ .debug_abbrev  0x00001a0e       0x21 Debug/./src/_ccp.o
+ .debug_abbrev  0x00001a2f      0x13b Debug/./src/sysclk.o
+ .debug_abbrev  0x00001b6a      0x3fe Debug/./src/timer.o
+ .debug_abbrev  0x00001f68      0x253 Debug/./src/alert.o
+ .debug_abbrev  0x000021bb      0x2db Debug/./src/reactor.o
+ .debug_abbrev  0x00002496      0x82e Debug/blink.o
+ .debug_abbrev  0x00002cc4       0x14 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .debug_abbrev  0x00002cd8       0x14 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .debug_abbrev  0x00002cec       0x14 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .debug_abbrev  0x00002d00       0x14 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .debug_abbrev  0x00002d14       0x14 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .debug_abbrev  0x00002d28       0x14 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+
+.debug_line     0x00000000     0x1bf2
+ *(.debug_line .debug_line.* .debug_line_end)
+ .debug_line    0x00000000      0x14b /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ .debug_line    0x0000014b       0x53 Debug/./src/_ccp.o
+ .debug_line    0x0000019e       0xe4 Debug/./src/sysclk.o
+ .debug_line    0x00000282      0xa34 Debug/./src/timer.o
+ .debug_line    0x00000cb6      0x37c Debug/./src/alert.o
+ .debug_line    0x00001032      0x487 Debug/./src/reactor.o
+ .debug_line    0x000014b9      0x48d Debug/blink.o
+ .debug_line    0x00001946       0x51 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .debug_line    0x00001997       0x87 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .debug_line    0x00001a1e       0x75 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .debug_line    0x00001a93       0x57 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .debug_line    0x00001aea       0x9f /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .debug_line    0x00001b89       0x69 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+
+.debug_frame    0x00000000      0x348
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x24 Debug/./src/sysclk.o
+ .debug_frame   0x00000024      0x224 Debug/./src/timer.o
+ .debug_frame   0x00000248       0x34 Debug/./src/alert.o
+ .debug_frame   0x0000027c       0x98 Debug/./src/reactor.o
+ .debug_frame   0x00000314       0x34 Debug/blink.o
+
+.debug_str      0x00000000     0x37ed
+ *(.debug_str)
+ .debug_str     0x00000000      0xbcd /opt/ATtiny_DFP.2.0.368/gcc/dev/attiny3224/avrxmega3/crtattiny3224.o
+ .debug_str     0x00000bcd     0x2c20 Debug/./src/_ccp.o
+                                 0x42 (size before relaxing)
+ .debug_str     0x000037ed      0x2dc Debug/./src/sysclk.o
+ .debug_str     0x000037ed      0x621 Debug/./src/timer.o
+ .debug_str     0x000037ed      0x3d7 Debug/./src/alert.o
+ .debug_str     0x000037ed      0x32b Debug/./src/reactor.o
+ .debug_str     0x000037ed     0x25f6 Debug/blink.o
+ .debug_str     0x000037ed       0x6d /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .debug_str     0x000037ed       0x6d /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .debug_str     0x000037ed       0x6d /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .debug_str     0x000037ed       0x6d /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .debug_str     0x000037ed       0x6d /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .debug_str     0x000037ed       0x6d /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+
+.debug_loc      0x00000000     0x1103
+ *(.debug_loc)
+ .debug_loc     0x00000000      0xaa5 Debug/./src/timer.o
+ .debug_loc     0x00000aa5      0x30f Debug/./src/alert.o
+ .debug_loc     0x00000db4      0x26c Debug/./src/reactor.o
+ .debug_loc     0x00001020       0xe3 Debug/blink.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges   0x00000000      0x2b0
+ *(.debug_ranges)
+ .debug_ranges  0x00000000       0x10 Debug/./src/sysclk.o
+ .debug_ranges  0x00000010      0x198 Debug/./src/timer.o
+ .debug_ranges  0x000001a8       0x70 Debug/./src/alert.o
+ .debug_ranges  0x00000218       0x68 Debug/./src/reactor.o
+ .debug_ranges  0x00000280       0x30 Debug/blink.o
+
+.debug_addr
+ *(.debug_addr)
+
+.debug_line_str
+                0x00000000       0x61
+ *(.debug_line_str)
+ .debug_line_str
+                0x00000000       0x61 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_exit.o)
+ .debug_line_str
+                0x00000061       0x61 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_copy_data.o)
+ .debug_line_str
+                0x00000061       0x61 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_clear_bss.o)
+ .debug_line_str
+                0x00000061       0x61 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ctzsi2.o)
+ .debug_line_str
+                0x00000061       0x61 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_ffssi2.o)
+ .debug_line_str
+                0x00000061       0x61 /opt/avr-gcc-14.1.0-x64-linux/bin/../lib/gcc/avr/14.1.0/avrxmega3/libgcc.a(_loop_ffsqi2.o)
+
+.debug_loclists
+ *(.debug_loclists)
+
+.debug_macro
+ *(.debug_macro)
+
+.debug_names
+ *(.debug_names)
+
+.debug_rnglists
+ *(.debug_rnglists)
+
+.debug_str_offsets
+ *(.debug_str_offsets)
+
+.debug_sup
+ *(.debug_sup)
+OUTPUT(Debug/blink.elf elf32-avr)
+LOAD linker stubs
