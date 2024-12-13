@@ -28,13 +28,18 @@
 #include <limits.h>  // for CHAR_BIT
 #include <stdarg.h>
 
-#include "utils/interrupt.h"
+#include "interrupt.h"
 
 #include "alert.h"
 #include "debug.h"
 #include "reactor.h"
 
 #include "debug.h"
+
+static uint8_t bit_shift_table[32] = {
+    1 << 0, 1 << 1, 1 << 2, 1 << 3,
+    1 << 4, 1 << 5, 1 << 6, 1 << 7
+};
 
 /**
  * @def REACTOR_MAX_HANDLERS
@@ -115,7 +120,10 @@ void reactor_null_notify_from_isr(reactor_handle_t handle)
 {
    if ( handle != REACTOR_NULL_HANDLE )
    {
-      _reactor_notifications |= (1L << handle);
+      uint8_t bit_shift = bit_shift_table[handle/4];
+      uint8_t *pNotif = (uint8_t*)&_reactor_notifications;
+
+      *(pNotif + (handle / 4)) |= bit_shift;      
    }
 }
 
