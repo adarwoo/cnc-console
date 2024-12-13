@@ -37,9 +37,9 @@
 #include "debug.h"
 
 static uint8_t bit_shift_table[8] = {
-    1 << 0, 1 << 1, 1 << 2, 1 << 3,
-    1 << 4, 1 << 5, 1 << 6, 1 << 7
+    1 << 0, 1 << 1, 1 << 2, 1 << 3, 1 << 4, 1 << 5, 1 << 6, 1 << 7
 };
+
 
 /**
  * @def REACTOR_MAX_HANDLERS
@@ -62,8 +62,8 @@ static reactor_item_t _handlers[REACTOR_MAX_HANDLERS] = {0};
 /** Lock new registrations once the reactor is started */
 static bool _reactor_lock = false;
 
-/** Notification registry */
-uint32_t _reactor_notifications = 0;
+/** Notification registry - needs speed - so use the GPIO in 0 */
+#define _reactor_notifications *((uint32_t*)(&GPIO0))
 
 /** Initialize the reactor API */
 void reactor_init(void)
@@ -120,10 +120,10 @@ void reactor_null_notify_from_isr(reactor_handle_t handle)
 {
    if ( handle != REACTOR_NULL_HANDLE )
    {
-      uint8_t bit_shift = bit_shift_table[handle/4];
+      uint8_t bit_shift = bit_shift_table[handle % 8];
       uint8_t *pNotif = (uint8_t*)&_reactor_notifications;
 
-      *(pNotif + (handle / 4)) |= bit_shift;      
+      *(pNotif + (handle / 4)) |= bit_shift;
    }
 }
 
@@ -184,7 +184,12 @@ void reactor_run(void)
          uint8_t pos = __builtin_ctzl(_reactor_notifications);
 
          // Flip the flag before calling - so it could be set again by the caller
-         _reactor_notifications ^= (1L << pos);
+         {
+            uint8_t bit_shift = bit_shift_table[pos % 8];
+            uint8_t *pNotif = (uint8_t*)&_reactor_notifications;
+
+            *(pNotif + (pos / 4)) ^= bit_shift;
+         }
 
          sei();
 
