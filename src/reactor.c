@@ -36,7 +36,7 @@
 
 #include "debug.h"
 
-static uint8_t bit_shift_table[32] = {
+static uint8_t bit_shift_table[8] = {
     1 << 0, 1 << 1, 1 << 2, 1 << 3,
     1 << 4, 1 << 5, 1 << 6, 1 << 7
 };
