@@ -33,8 +33,7 @@
 /*
  * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
  */
-#ifndef CONF_CLOCK_H_INCLUDED
-#define CONF_CLOCK_H_INCLUDED
+#pragma once
 
 #define CONFIG_SYSCLK_SOURCE        SYSCLK_SRC_RC20MHZ
 //#define CONFIG_SYSCLK_SOURCE        SYSCLK_SRC_ULP32KHZ
@@ -59,5 +58,3 @@
 
 /* Use to enable and select RTC clock source */
 //#define CONFIG_RTC_SOURCE           SYSCLK_RTCSRC_ULP
-
-#endif /* CONF_CLOCK_H_INCLUDED */

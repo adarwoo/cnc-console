@@ -36,7 +36,6 @@
 #ifndef TINY2_SYSCLK_H_INCLUDED
 #define TINY2_SYSCLK_H_INCLUDED
 
-#include <board.h>
 #include <compiler.h>
 #include <ccp.h>
 
@@ -106,7 +105,7 @@ extern "C" {
 #define SYSCLK_RTCSRC_EXTCLK  CLK_RTCSRC_EXTCLK_gc
 
 
-/** 
+/**
  * \name Clock perscaler value
  */
 #if CONFIG_SYSCLK_PSDIV == SYSCLK_PSDIV_1
@@ -137,7 +136,7 @@ extern "C" {
 #error Bad SYSCLK_PSDIR value
 #endif
 
-/** 
+/**
  * Compute the system clock from macro
  */
 #if CONFIG_SYSCLK_SOURCE == SYSCLK_SRC_RC20MHZ
@@ -150,7 +149,7 @@ extern "C" {
   #ifndef CONFIG_SYSCLK_EXT_FREQ
     #error Need to specify the external clock frequency
   #endif
-  
+
   #define F_CPU (CONFIG_SYSCLK_EXT_FREQ/SYSCLOCK_PRESCALE_VALUE)
 #endif
 

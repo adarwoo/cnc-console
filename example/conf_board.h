@@ -1,34 +1,30 @@
-/*
- * board.h
- *
- * Created: 07/05/2024 11:20:17
- *  Author: micro
- */ 
-#ifndef BOARD_H_
-#define BOARD_H_
+#pragma once
+/**
+ * Board configuration
+ * Using macros which work with C and C++ io APIs, assign all I/O pins
+ * of the board.
+ * Use the macro/struct PinDef.
+ * In C code, this macro creates an ioport_pin_t, in C++ a PinDef
+ */
+#ifdef __cplusplus
+#include <asx/ioport.hpp>
+#else
+#include <ioport.h>
+#endif
 
-// Tracing
-#define TRACE_INFO IOPORT_CREATE_PIN(PORTA, 1)
-#define TRACE_WARN IOPORT_CREATE_PIN(PORTA, 2)
-#define TRACE_ERR  IOPORT_CREATE_PIN(PORTA, 3)
+// Define spare pins used for tracing
+#define TRACE_INFO PinDef(A, 3)
+#define TRACE_WARN PinDef(A, 5)
+#define TRACE_ERR  PinDef(B, 2)
 
-// Share the trace pin
-#define ALERT_OUTPUT_PIN TRACE_ERR
+#ifndef NDEBUG
+   // Assign pins for tracing the reactor
+#  define DEBUG_REACTOR_IDLE TRACE_WARN
+#  define DEBUG_REACTOR_BUSY TRACE_INFO
 
-/************************************************************************/
-/* Functional I/Os                                                      */
-/************************************************************************/
-#define IOPORT_TOOL_SETTER_AIR_BLAST IOPORT_CREATE_PIN(PORTA, 4)
+   // Assign a pin for the alert function
+#  define ALERT_OUTPUT_PIN TRACE_ERR
+#endif
 
-#define IOPORT_CHUCK_CLAMP IOPORT_CREATE_PIN(PORTA, 5)
-
-#define IOPORT_SPINDLE_CLEAN IOPORT_CREATE_PIN(PORTA, 6)
-
-#define IOPORT_DOOR_PUSH IOPORT_CREATE_PIN(PORTA, 7)
-#define IOPORT_DOOR_PULL IOPORT_CREATE_PIN(PORTB, 3)
-
-// Input
-#define IOPORT_PRESSURE_READOUT IOPORT_CREATE_PIN(PORTB, 2)
-
-
-#endif /* BOARD_H_ */
+// Define the pin to blink
+#define MY_LED PinDef(B, 0)

@@ -161,7 +161,9 @@ timer_count_t timer_get_count(void)
  * Configure the timer and enable the interrupt.
  * Assumes irq are started
  */
-void timer_init(void)
+static void
+   __attribute__ ((section (".init5"), naked, used))
+   _timer_init(void)
 {
    size_t i;
 
@@ -272,7 +274,7 @@ timer_instance_t _timer_arm(
 
 		i = oneLeftOf;
 	}
-   
+
    timer_instance_t retval = (reuse == TIMER_INVALID_INSTANCE) ? ++_timer_current_instance : reuse;
 
 	// Insert the new item
@@ -360,7 +362,7 @@ void timer_dispatch(void *arg)
 			if (pFuture->repeat)
 			{
 				_timer_arm(
-               pFuture->reactor, 
+               pFuture->reactor,
                pFuture->count + pFuture->repeat,
                pFuture->repeat,
                pFuture->instance,

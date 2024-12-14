@@ -1,21 +1,21 @@
-#include <asx/chrono.hpp>
+#include <chrono> // For the ""s
 #include <asx/reactor.hpp>
-#include <asx/ioport.hpp>
+
+#include <conf_board.h>
 
 using namespace asx;
 using namespace asx::ioport;
+using namespace std::chrono;
 
-auto constexpr MY_LED = PinDef{B, 1};
-
+// Called by the reactor every second
 auto flash_led() -> void {
    Pin(MY_LED).toggle();
 }
 
+// Initialise all and go
 auto main() -> int {
-   using namespace std::chrono;
+   Pin(MY_LED).init(dir_t::out, value_t::high);
 
-   Pin(MY_LED).init(dir_t::out);
-   reactor::init();
    reactor::bind(flash_led).repeat(1s);
    reactor::run();
 }

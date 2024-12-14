@@ -60,9 +60,6 @@ typedef uint32_t reactor_mask_t;
 /** Callback type called by the reactor when an event has been logged */
 typedef void (*reactor_handler_t)(void*);
 
-/** Initialize the reactor API */
-void reactor_init(void);
-
 /** Add a new reactor process */
 reactor_handle_t reactor_register(
    const reactor_handler_t, reactor_priority_t);

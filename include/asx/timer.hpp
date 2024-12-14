@@ -69,10 +69,6 @@ namespace asx {
       using duration = steady_clock::duration;
       using time_point = steady_clock::time_point;
 
-      inline void init() {
-         timer_init();
-      }
-
       inline bool cancel(uint32_t timer_id) {
          return timer_cancel(timer_id);
       }

@@ -12,6 +12,8 @@
  * The reactor cycle time can be monitored defining debug pins REACTOR_IDLE
  *  and REACTOR_BUSY
  * This version does the sorting by position and first come first served
+ * At 20MHz - The reactor + timer takes 13us every 1ms of the CPU. (1.3%)
+ * The reactor overhead is 5us + 1us to notify from an interrupt
  *****************************************************************************
  * @file
  * Implementation of the reactor API
@@ -36,11 +38,6 @@
 
 #include "debug.h"
 
-static uint8_t bit_shift_table[8] = {
-    1 << 0, 1 << 1, 1 << 2, 1 << 3, 1 << 4, 1 << 5, 1 << 6, 1 << 7
-};
-
-
 /**
  * @def REACTOR_MAX_HANDLERS
  * Maximum number of handlers for the reactor. This defines defaults
@@ -48,6 +45,11 @@ static uint8_t bit_shift_table[8] = {
  *  required.
  */
 #define REACTOR_MAX_HANDLERS 32
+
+// Lookup table for fast masking
+static const uint8_t bit_shift_table[8] = {
+   0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80
+};
 
 /** Holds all reactor handlers with mapping to the reaction mask */
 typedef struct
@@ -62,11 +64,16 @@ static reactor_item_t _handlers[REACTOR_MAX_HANDLERS] = {0};
 /** Lock new registrations once the reactor is started */
 static bool _reactor_lock = false;
 
-/** Notification registry - needs speed - so use the GPIO in 0 */
+/** Notification registry */
 #define _reactor_notifications *((uint32_t*)(&GPIO0))
 
-/** Initialize the reactor API */
-void reactor_init(void)
+/**
+ * Initialize the reactor API
+ * This is called prior to C++ static constructors
+ */
+static void
+   __attribute__ ((section (".init5"), naked, used))
+   _reactor_init(void)
 {
    // Use a debug pin if available
    debug_init(REACTOR_IDLE);
@@ -122,8 +129,9 @@ void reactor_null_notify_from_isr(reactor_handle_t handle)
    {
       uint8_t bit_shift = bit_shift_table[handle % 8];
       uint8_t *pNotif = (uint8_t*)&_reactor_notifications;
+      uint8_t byte_index = handle / 8;
 
-      *(pNotif + (handle / 4)) |= bit_shift;
+      pNotif[byte_index] |= bit_shift;
    }
 }
 
@@ -181,19 +189,21 @@ void reactor_run(void)
       else
       {
          // At least 1 flag set
-         uint8_t pos = __builtin_ctzl(_reactor_notifications);
+         uint8_t handle = __builtin_ctzl(_reactor_notifications);
 
          // Flip the flag before calling - so it could be set again by the caller
          {
-            uint8_t bit_shift = bit_shift_table[pos % 8];
+            uint8_t bit_shift = bit_shift_table[handle % 8];
             uint8_t *pNotif = (uint8_t*)&_reactor_notifications;
+            uint8_t byte_index = handle / 8;
 
-            *(pNotif + (pos / 4)) ^= bit_shift;
+            pNotif[byte_index] ^= bit_shift;
          }
 
          sei();
 
-         _handlers[pos].handler(_handlers[pos].arg);
+         debug_set(REACTOR_BUSY);
+         _handlers[handle].handler(_handlers[handle].arg);
 
          // Keep the system alive for as long as the reactor is calling handlers
          // We assume that if no handlers are called, the system is dead.

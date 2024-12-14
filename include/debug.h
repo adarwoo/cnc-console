@@ -31,16 +31,11 @@
 #define IS_DEBUG_PORT(x) IS_PAREN( CAT(DEBUG_, x) (()) )
 
 /** Set the given pin, if it has been defined as DEBUG_x, an an output pin set to 0 */
-#define debug_init(x) \
-   IIF(IS_DEBUG_PORT(x))(\
-      ioport_set_pin_dir(DEBUG_ ## x, IOPORT_DIR_OUTPUT);\
-      ioport_set_pin_level(DEBUG_ ## x, IOPORT_PIN_LEVEL_LOW),{})
-
+#define debug_init(x) IIF(IS_DEBUG_PORT(x))(ioport_set_pin_dir(DEBUG_ ## x, IOPORT_DIR_OUTPUT),{})
 /** Set the corresponding debug pin  */
-#define debug_set(x) IIF(IS_DEBUG_PORT(x))(ioport_set_pin_level(DEBUG_ ## x, IOPORT_PIN_LEVEL_HIGH),{})
+#define debug_set(x) IIF(IS_DEBUG_PORT(x))(ioport_set_pin_level(DEBUG_ ## x, true),{})
 /** Clear the corresponding debug pin  */
-#define debug_clear(x) IIF(IS_DEBUG_PORT(x))(ioport_set_pin_level(DEBUG_ ## x, IOPORT_PIN_LEVEL_LOW),{})
-
+#define debug_clear(x) IIF(IS_DEBUG_PORT(x))(ioport_set_pin_level(DEBUG_ ## x, false),{})
 
 /**@}*/
 /**@}*/

@@ -39,7 +39,13 @@
 #include <sysclk.h>
 #include <osc.h>
 
-void sysclk_init(void)
+/**
+ * Fill the heap with a 0xaa
+ * This is called prior to C++ static constructors
+ */
+static void
+   __attribute__ ((section (".init5"), naked, used))
+   _sysclk_init(void)
 {
 	/* Set up system clock prescalers if different from defaults */
 	sysclk_set_prescalers(CONFIG_SYSCLK_PSDIV);
@@ -50,7 +56,7 @@ void sysclk_init(void)
 	 */
 	if (CONFIG_SYSCLK_SOURCE != SYSCLK_SRC_RC20MHZ) {
 		ccp_write_io((uint8_t *)&CLKCTRL.MCLKLOCK, CONFIG_SYSCLK_SOURCE);
-      
+
       // Wait for the clock to stabilize
       switch (CONFIG_SYSCLK_SOURCE) {
       case SYSCLK_SRC_RC20MHZ:

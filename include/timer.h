@@ -21,8 +21,7 @@
  * @code
  * #include "lib/timer.h"
  * #include "lib/reactor.h"
- * // Initialise the timer
- * timer_init();
+ * // The timer is automatically initialised in section .init5
  * // Arm an event to be called in 1 hour and 12 minutes
  * // Pass the value 12 when calling
  * timer_arm_from_now( callback, TIMER_HOURS(1)+TIMER_MINUTES(12), (void*)12);
@@ -83,9 +82,6 @@ typedef void (*timer_callback_t)( timer_instance_t, void * );
 /************************************************************************/
 /* Public API                                                           */
 /************************************************************************/
-
-/** Ready the service */
-void timer_init( void );
 
 /** Get the current counter */
 timer_count_t timer_get_count( void );

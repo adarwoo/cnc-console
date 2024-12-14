@@ -13,7 +13,6 @@
  * Additional timer service is added to the reactors
  * @author software@arreckx.com
  */
-#include "sysclk.h"
 #include "reactor.h"
 #include "asx/timer.hpp"
 
@@ -192,16 +191,6 @@ namespace asx {
       static inline void clear(mask m) { reactor_clear(m); }
 
       static inline void notify_from_isr(Handle on_xx) { reactor_null_notify_from_isr(on_xx); }
-
-      extern "C" void sysclk_init();
-
-      static inline void init() {
-         // Configure the system clock according to the conf/conf_clock.h
-         sysclk_init();
-
-         reactor_init();
-         timer_init();
-      }
 
       static inline void run() { reactor_run(); }
    }

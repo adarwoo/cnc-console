@@ -7,7 +7,13 @@ else
 target := $(if $(SIM),sim,avr)
 endif
 
-include $(TOP)/make/$(target).mak
+# Reference all from the solution
+VPATH=$(TOP)
+
+ASX_DIR ?= $(TOP)/asx
+
+include $(ASX_DIR)/make/$(target).mak
+include $(ASX_DIR)/make/asx.mak
 
 build_type ?= $(if $(NDEBUG),Release,Debug)
 MUTE  ?= $(if $(VERBOSE),@set -x;,@)
