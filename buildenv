@@ -1,5 +1,4 @@
 #!/bin/bash
-
 readonly image=asx:latest
 readonly hostname_=asx
 
@@ -21,8 +20,15 @@ if (($(docker images -q $image | wc -l) == 0)); then
 fi
 
 # Variables
-this_script_dir=$(cd -P $(dirname $0) ; pwd)
-base_opts="-u $(id -u $USER):$(getent group docker | cut -d: -f3) -v $this_script_dir:$this_script_dir"
+this_dir=$(cd -P $(dirname $0) ; pwd)
+
+if [[ $(realpath $PWD) == $(realpath ${this_dir})* ]]; then
+   mountdir=$(realpath ${this_dir})
+else
+   mountdir=$(realpath ${this_dir}/..)
+fi
+
+base_opts="-u $(id -u $USER):$(getent group docker | cut -d: -f3) -v ${mountdir}:${mountdir}"
 workdir="$(realpath $(pwd))"
 
 # Name the runtime container uniquely
@@ -36,8 +42,9 @@ else
 fi
 
 # Run make or start a shell
-if (($# == 0)); then
-   docker run ${USE_TTY} --rm --init --name $container_name $xoptions -h $hostname_ $base_opts -w $workdir $image $@
-else
+if [[ $1 == "make" ]]; then
+   shift
    docker run ${USE_TTY} --rm --init --name $container_name -h $hostname_ $base_opts -w $workdir $image make -j$core_count $@
+else
+   docker run ${USE_TTY} --rm --init --name $container_name $xoptions -h $hostname_ $base_opts -w $workdir $image $@
 fi

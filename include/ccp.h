@@ -40,7 +40,7 @@
 extern "C" {
 #endif
 
-#include <compiler.h>
+#include <avr/io.h>
 
 /**
  * \defgroup ccp_group Configuration Change Protection

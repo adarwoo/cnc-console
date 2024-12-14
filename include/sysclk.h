@@ -36,7 +36,6 @@
 #ifndef TINY2_SYSCLK_H_INCLUDED
 #define TINY2_SYSCLK_H_INCLUDED
 
-#include <compiler.h>
 #include <ccp.h>
 
 // Include clock configuration for the project.

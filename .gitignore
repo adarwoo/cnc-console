@@ -36,3 +36,4 @@
 # Build files
 **/Debug
 **/Release
+**/__pycache__

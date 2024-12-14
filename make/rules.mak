@@ -1,5 +1,23 @@
 .PHONY: clean all
 
+# Are we running in a Docker env?
+
+# Check if running inside Docker
+INSIDE_DOCKER:=$(shell test -f /.dockerenv && echo yes || echo no)
+
+ifeq ($(INSIDE_DOCKER),no)
+# Find the directory of this file (b.mak)
+CURRENT_MAKEFILE := $(lastword $(MAKEFILE_LIST))
+ASX_DIR := $(dir $(abspath $(CURRENT_MAKEFILE)/..))
+
+# Not in Docker, respawn inside Docker
+DOCKER_RUN_CMD := $(ASX_DIR)buildenv make
+
+$(MAKECMDGOALS):
+	@$(DOCKER_RUN_CMD) $@
+
+else
+
 # By default, build for the AVR target. Export sim to build a simulator
 ifdef ToolchainDir
 target := studio
@@ -95,7 +113,7 @@ $(BUILD_DIR)/$(BIN)$(BIN_EXT) : $(OBJS)
 	$(DIAG)
 
 $(BUILD_DIR)/%.o : %.c
-	@echo Compiling $<
+	@echo "Compiling  C " $<
 	$(MUTE)$(COMPILE.c) $< -o $@
 
 ${BUILD_DIR}/%.o : %.cpp
@@ -103,7 +121,7 @@ ${BUILD_DIR}/%.o : %.cpp
 	$(MUTE)$(COMPILE.cxx) $< -o $@
 
 $(BUILD_DIR)/%.o : %.s
-	@echo Assembling $<
+	@echo "Assembling   " $<
 	$(MUTE)$(COMPILE.as) $< -o $@
 
 $(BUILD_DIR)/%.rcd : %.json
@@ -143,3 +161,4 @@ $(BUILDDIRS) :
 clean:
 	@echo Removing build directory: $(BUILD_DIR)
 	$(MUTE)rm -rf $(BUILD_DIR)
+endif
