@@ -8,39 +8,22 @@ namespace console
 {
    using namespace asx::ioport;
 
-    using pca_local = PCA9555<1, 0x234, 0x23>;
-    using pca_remote = PCA9555<1, 0x234, 0x23>;
-
-   auto constexpr LED_A = PinDef{B, 1};
-   auto constexpr LED_B = PinDef{B, 0};
-   auto constexpr LED_C = PinDef{A, 2};
-   auto constexpr RELAY_A = PinDef{B, 3};
-   auto constexpr RELAY_B = PinDef{A, 7};
-   auto constexpr RELAY_C = PinDef{A, 6};
+   using PCALocal = PCA9555<1, 0x234, 0x23>;
+   using PCARemote = PCA9555<1, 0x234, 0x23>;
 
    /** When constructed, the LED is ON to test it */
    void init()
    {
       using namespace std::chrono;
-
-      Pin(LED_A).init(value::high, dir::out);
-      Pin(LED_B).init(value::high, dir::out);
-      Pin(LED_C).init(value::high, dir::out);
-      Pin(RELAY_A).init(value::low, dir::out);
-      Pin(RELAY_B).init(value::low, dir::out);
-      Pin(RELAY_C).init(value::low, dir::out);
-
-      // Reset the LEDs to the actual state after 2seconds
-      asx::reactor::bind(clean_leds).delay(2s);
    }
 
    on_i2c_data_received
 
 
-Master::init( 
+Master::init(
     reactor::bind()
 
-    
+
 )
 
     static enum {
@@ -105,7 +88,7 @@ public:
         if ( sm.is("sampling_pca1"_s) ) {
             index = 1;
         }
-        
+
         //integrator[index].integrate(data);
 
         //

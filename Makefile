@@ -1,12 +1,13 @@
 TOP:=.
 ARCH:=attiny3224
-BIN:=relay
+BIN:=cnc_console
 INCLUDE_DIRS:=conf src
-ASX_USE:=modbus_rtu
+ASX_USE:=i2c_master pca9555
 
 # Project own files
 SRCS = \
    src/main.cpp \
+	src/mux.cpp
 
 # Inlude the actual build rules
 include asx/make/rules.mak
