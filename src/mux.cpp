@@ -17,7 +17,7 @@ namespace console {
 
       static constexpr uint8_t io0_dir = 0b11000000;
       static constexpr uint8_t io1_dir = 0b11111111;
-      static constexpr uint16_t io_dir = io1_dir << 8 | io0_dir;
+      static constexpr uint16_t io_dir = io0_dir << 8 | io1_dir;
 
       uint16_t frame_buffer = 0;
 
@@ -39,8 +39,8 @@ namespace console {
                , "init2"_s         + event<i2c_ready> / [] {iomux_left.set_pol(io_dir, react_on_i2c_ready); }                    = "init3"_s
                , "init3"_s         + event<i2c_ready> / [] {iomux_right.set_pol(io_dir, react_on_i2c_ready);
                                                             react_on_poll.repeat(2ms); }                                         = "wait_for_poll"_s
-               , "wait_for_poll"_s + event<polling>   / [] {iomux_right.set_value(frame_buffer>>8, react_on_i2c_ready); }        = "set_left"_s
-               , "set_left"_s      + event<i2c_ready> / [] {iomux_right.set_value(frame_buffer & 0xff, react_on_i2c_ready); }    = "set_right"_s
+               , "wait_for_poll"_s + event<polling>   / [] {iomux_left.set_value(frame_buffer, react_on_i2c_ready); }        = "set_left"_s
+               , "set_left"_s      + event<i2c_ready> / [] {iomux_right.set_value(frame_buffer << 8, react_on_i2c_ready); }    = "set_right"_s
                , "set_right"_s     + event<i2c_ready> / [] {iomux_left.read(react_on_i2c_ready); }                               = "get_left"_s
                , "get_left"_s      + event<i2c_ready> / [] {iomux_right.read(react_on_i2c_ready); }                              = "get_right"_s
                , "get_right"_s     + event<i2c_ready> = "wait_for_poll"_s
