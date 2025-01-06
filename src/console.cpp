@@ -1,3 +1,7 @@
+/**
+ * Handles all modbus requests
+ * From setting the leds, reading the switch or the active key, or sounding the buzzer
+ */
 #include <piezzo.h>
 
 #include "console.hpp"
@@ -29,6 +33,6 @@ namespace console {
     }
 
     void on_beep() {
-        piezzo_play(192, "C");
+        piezzo_play(150, "B4");
     }
 }
