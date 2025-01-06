@@ -17,12 +17,19 @@ namespace console {
 
       static constexpr uint8_t io0_dir = 0b11000000;
       static constexpr uint8_t io1_dir = 0b11111111;
+      static constexpr uint8_t key_mask = 0b00111111;
       static constexpr uint16_t io_dir = io0_dir << 8 | io1_dir;
 
       uint16_t frame_buffer = 0;
 
-      uint16_t integrator[3];
-      uint16_t key_status;
+      struct KeyIntegrator {
+         uint8_t previous[3];
+         uint8_t current;
+      } integrator[2] = {0};
+
+      /// @brief Actual key being active (with filter and shift)
+      uint8_t active_key = 0; // 1 to 13 (1-6 / 7 / 8-14)
+      bool clear_nkeys = false;
 
       auto iomux_left = PCA9555(0);
       auto iomux_right = PCA9555(1);
@@ -50,13 +57,54 @@ namespace console {
 
       sm<InitPCA> i2c_sequencer;
 
+      void integrate_keys(uint8_t side, uint8_t current) {
+         KeyIntegrator &i = integrator[side];
+         
+         i.previous[0] = i.previous[1]; i.previous[1] = i.previous[2]; i.previous[2] = current;
+         
+         uint8_t debounced_on = (i.previous[0] | i.previous[1] | i.previous[2]);
+         uint8_t debounced_off = (i.previous[0] & i.previous[1] & i.previous[2]);
+
+         i.current = (i.current & debounced_on) | debounced_off;
+      }
+
       auto on_i2c_ready(status_code_t code) {
          alert_and_stop_if(code != status_code_t::STATUS_OK);
 
+         // If reading - integrate the keys
          if ( i2c_sequencer.is("get_left"_s) ) {
-            uint16_t value = iomux_left.get_value();
+            integrate_keys(0, iomux_left.get_value() & key_mask);
          } else if ( i2c_sequencer.is("get_right"_s) ) {
-            uint16_t value = iomux_right.get_value();
+            integrate_keys(1, iomux_right.get_value() & key_mask);
+
+            // Regroup the keys on 1 bytes 6 left + door + shift
+            bool shift = integrator[1].current & 0b010000;
+            bool door = integrator[1].current & 0b100000;
+
+            // Create a view of all the push buttons (not accounting for the shift key)
+            uint8_t all_keys = (integrator[0].current & 0b111111) << 1 | (door?1:0);
+
+            // Calculate active keys - factoring the shift key
+            if ( all_keys != 0 ) {
+               if ( clear_nkeys ) {
+                  // Do nothing
+               } else if ( active_key == 0 ) {
+                  // Make sure only 1 bits set
+                  if ( (all_keys & (all_keys - 1)) == 0 ) {
+                     active_key = __builtin_ctzl(all_keys) + (shift?6:0) + 1;
+                  }
+               } else {
+                  // The key remains valid if it is pushed (ignore the shift)
+                  uint8_t key_bit = ( active_key < 6 ) ? active_key - 1 : active_key - 7;
+
+                  if ( not (all_keys & key_bit) ) {  // No longer pressed
+                     clear_nkeys = true;
+                  }
+               }
+            } else {
+               clear_nkeys = false;
+               active_key = 0;
+            }
          }
 
          i2c_sequencer.process_event(i2c_ready{});
@@ -75,8 +123,17 @@ namespace console {
          i2c_sequencer.process_event(start{});
       }
 
-      void set(uint16_t value) {
+      void set_leds(uint16_t value) {
          frame_buffer = value;
+      }
+
+      // Return the active key
+      uint8_t get_active_key_code() {
+         return active_key;
+      }
+
+      uint8_t get_switch_status() {
+         return integrator[1].current & 0x0f;
       }
    }
 }

@@ -13,7 +13,7 @@ using namespace std::chrono;
 void seq() {
    static uint16_t c = 1;
 
-   console::mux::set(c);
+   console::mux::set_leds(c);
 
    if ( c == 0x40 ) {
       c = 0x0100;
@@ -23,6 +23,7 @@ void seq() {
 
    c <<= 1;
 }
+
 
 
 int main()

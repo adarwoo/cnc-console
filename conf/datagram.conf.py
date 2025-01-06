@@ -1,59 +1,78 @@
 #!/usr/bin/env python3
 from modbus_rtu_slave_rc import *  # Import everything from modbus_generator
 
-# Coils = LED+
+# Coils = LED+ (write multiple only)
 # Discrete inputs = Switch state
-# Input register = Message queue
+# Input register = Active key
 
-# 0x00 Start
-# 0x01 Stop
-# 0x02 Homing
-# 0x03 Goto0
-# 0x04 Park
-# 0x05 Chuck
-# 0x06 Door
-# 0x07 PGM
-# 0x10 OvDoor
-# 0x11 OvDust
-# 0x12 OvCool
-# 0x13 OvFree
+# Keys
+# --------------
+#  0 : None
+#  1 : Start
+#  2 : Stop
+#  3 : Homing
+#  4 : Goto0
+#  5 : Park
+#  6 : Chuck
+#  7 : Door
+#  8 : Shift + Start
+#  9 : Shift + Stop
+# 10 : Shift + Homing
+# 11 : Shift + Goto0
+# 12 : Shift + Park
+# 13 : Shift + Chuck
+# 14 : Shift + Door
 
+# Switches
+# --------------
+# 0b0001 OvDoor
+# 0b0010 OvDust
+# 0b0100 OvCool
+# 0b1000 OvFree
+
+# LEDs
+# --------------
+# 0x0001 Start
+# 0x0002 Stop
+# 0x0004 Homing
+# 0x0008 Goto0
+# 0x0010 Park
+# 0x0020 Chuck
+# 0x0100 OvDoor
+# 0x0200 OvDust
+# 0x0400 OvCool
+# 0x0800 OvFree
+# 0x1000 Door
+# 0x2000 Shift
 
 Modbus({
-    "buffer_size": 32,
-    "namespace": "relay",
+    "buffer_size": 8,
+    "namespace": "console",
 
     "callbacks": {
-        "on_get_leds_status": [(u8, "from"), (u8, "qty")],
-        "on_get_sw_status":   [(u8, "from"), (u8, "qty")],
-        "on_set_single_led":  [(u8, "led_at"), (u16, "operation")],
-        "on_write_leds":      [(u8, "from"), (u8, "qty")],
-        "on_read_queue":      []
+        "on_get_sw_status":   [],
+        "on_write_leds":      [(u16, "data")],
+        "on_get_active_key":  [],
+        "on_beep":            [],
     },
 
-    "device@0x1A": [
-        # Get the LED status
-        (READ_COILS,            u16(0, 11, alias="from"),
-                                u16(1, 11, alias="qty"), # Byte count
-                                "on_get_leds_status"),
-
+    "device@37": [
         # Read the push button and switches state
-        (READ_DISCRETE_INPUTS,  u16(0, 11, alias="from"),
-                                u16(1, 11, alias="qty"), # Byte count
+        (READ_DISCRETE_INPUTS,  u16(0, alias="from"),
+                                u16(4, alias="qty"), # Byte count
                                 "on_get_sw_status"),
 
-        # Turn an LED on or off
-        (WRITE_SINGLE_COIL,     u16(0, 11, alias="index"),
-                                u16([0xFF00, 0], alias="op"),
-                                "on_set_single_led"),
-
-        (WRITE_MULTIPLE_COILS,  u16(0, 11, alias="from"),
-                                u16(1, 11, alias="qty"), # Byte count
+        (WRITE_MULTIPLE_COILS,  u16(0, alias="from"),
+                                u16(16, alias="qty"),
+                                u8(2, alias="bytecount"),
+                                u16(alias="data"),
                                 "on_write_leds"),
 
-        # Returns FFFF if nothing. Returns FFxx for Alt keys
-        (READ_INPUT_REGISTERS,  u16(0x0000),
-                                u16(1),
-                                "on_read_queue"),
+        # Returns the active key
+        (READ_INPUT_REGISTERS,  u16(0, alias="from"),
+                                u16(1, alias="qty"),
+                                "on_get_active_key"),
+
+        (WRITE_SINGLE_REGISTER, u16(1), u16(1), "on_beep"),
     ]
 })
