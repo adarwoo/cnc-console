@@ -1,5 +1,6 @@
 asx
 import/
-relay.elf
-relay.map
+*.elf
+*.map
 Debug/
+Release/
