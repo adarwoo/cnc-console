@@ -50,10 +50,12 @@ Modbus({
     "namespace": "console",
 
     "callbacks": {
-        "on_get_sw_status":   [],
-        "on_write_leds":      [(u16, "data")],
-        "on_get_active_key":  [],
-        "on_beep":            [],
+        "on_get_sw_status" : [],
+        "on_read_leds"     : [(u8, "addr"), (u8, "qty")],        
+        "on_write_leds"    : [(u16, "data")],
+        "on_get_active_key": [],
+        "on_beep"          : [],
+        "on_custom"        : [(u16, "leds")]
     },
 
     "device@37": [
@@ -61,6 +63,10 @@ Modbus({
         (READ_DISCRETE_INPUTS,  u16(0, alias="from"),
                                 u16(4, alias="qty"), # Byte count
                                 "on_get_sw_status"),
+
+        (READ_COILS,            u16(0, 11, alias="from"),
+                                u16(1, 12, alias="qty"),
+                                "on_read_leds"),
 
         (WRITE_MULTIPLE_COILS,  u16(0, alias="from"),
                                 u16(16, alias="qty"),
@@ -73,6 +79,8 @@ Modbus({
                                 u16(1, alias="qty"),
                                 "on_get_active_key"),
 
-        (WRITE_SINGLE_REGISTER, u16(1), u16(1), "on_beep"),
+        (WRITE_SINGLE_REGISTER, u16(1), u16(0,1), "on_beep"),
+
+        (CUSTOM,                u16(alias="leds"), "on_custom"),
     ]
 })
