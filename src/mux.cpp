@@ -4,6 +4,8 @@
  * The key are consolidated using a 3 cycle integrator, then consolidated into a single key.
  */
 #include <asx/pca9555.hpp>
+#include <asx/ioport.hpp>
+
 #include <boost/sml.hpp>
 
 #include <alert.h>
@@ -19,7 +21,9 @@ namespace console {
       struct start {};
       struct i2c_ready {};
       struct polling {};
+      struct stuck {};
 
+      static constexpr auto leds_per_side = uint8_t{6};
       static constexpr auto io_msk = uint8_t{0b00111111};
 
       /// @brief Holds the current value for the LEDs
@@ -55,7 +59,11 @@ namespace console {
                , "set_left"_s      + event<i2c_ready> / [] {iomux_right.set_value<0>(frame_buffer[1], react_on_i2c_ready); }= "set_right"_s
                , "set_right"_s     + event<i2c_ready> / [] {iomux_left.read<1>(react_on_i2c_ready); }                       = "get_left"_s
                , "get_left"_s      + event<i2c_ready> / [] {iomux_right.read<1>(react_on_i2c_ready); }                      = "get_right"_s
-               , "get_right"_s     + event<i2c_ready> = "wait_for_poll"_s
+               , "get_right"_s     + event<i2c_ready>                                                                       = "wait_for_poll"_s
+               , "set_left"_s      + event<stuck>                                                                           = "wait_for_poll"_s
+               , "set_right"_s     + event<stuck>                                                                           = "wait_for_poll"_s
+               , "get_left"_s      + event<stuck>                                                                           = "wait_for_poll"_s
+               , "get_right"_s     + event<stuck>                                                                           = "wait_for_poll"_s
             );
          }
       };
@@ -64,9 +72,9 @@ namespace console {
 
       void integrate_keys(uint8_t side, uint8_t current) {
          KeyIntegrator &i = integrator[side];
-         
+
          i.previous[0] = i.previous[1]; i.previous[1] = i.previous[2]; i.previous[2] = current;
-         
+
          uint8_t debounced_on = (i.previous[0] | i.previous[1] | i.previous[2]);
          uint8_t debounced_off = (i.previous[0] & i.previous[1] & i.previous[2]);
 
@@ -75,6 +83,8 @@ namespace console {
 
       auto on_i2c_ready(status_code_t code) {
          alert_and_stop_if(code != status_code_t::STATUS_OK);
+         using namespace asx::ioport;
+         Pin(PinDef(A, 6)).clear();
 
          // If reading - integrate the keys
          if ( i2c_sequencer.is("get_left"_s) ) {
@@ -116,28 +126,55 @@ namespace console {
       }
 
       auto on_poll_input() {
+         static bool is_stuck = false;
+
+         if ( not i2c_sequencer.is("wait_for_poll"_s) ) {
+            if ( is_stuck ) {
+               i2c_sequencer.process_event( stuck{} );
+               is_stuck = false;
+            } else {
+               is_stuck = true;
+            }
+         }
+
          i2c_sequencer.process_event(polling{});
       }
 
       void init() {
-         i2c::Master::init(400_KHz);
-
-         react_on_i2c_ready = reactor::bind(on_i2c_ready);
+         react_on_i2c_ready = reactor::bind(on_i2c_ready, reactor::high);
          react_on_poll = reactor::bind(on_poll_input);
 
+         i2c::Master::init(400_KHz);
          i2c_sequencer.process_event(start{});
       }
 
       /// @brief Set the leds as one continuous buffer of 12 leds
       /// @param value 16 bits holder the 12bits
       void set_leds(uint16_t value) {
-         frame_buffer[0] = value & io_msk;
-         frame_buffer[1] = (value>>6) & io_msk;
+         frame_buffer[0] = (value>>6) & io_msk;
+         frame_buffer[1] = value & io_msk;
       }
 
       /// @brief Get the leds as a 12-bits values
       uint16_t get_leds() {
          return frame_buffer[0]<<6 | frame_buffer[1];
+      }
+
+      bool get_led(uint8_t index) {
+         if ( index < 6 ) {
+            return (frame_buffer[0] >> index) & 1;
+         }
+         return (frame_buffer[1] >> (index-6)) & 1;
+      }
+
+      void set_led(uint8_t index, bool on) {
+        uint8_t *frame = &frame_buffer[index / leds_per_side];
+        uint8_t mask = 1 << (index % leds_per_side);
+        if (on) {
+            *frame |= mask;
+        } else {
+            *frame &= (~mask);
+        }
       }
 
       // Return the active key

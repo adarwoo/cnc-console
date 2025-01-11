@@ -11,10 +11,12 @@ namespace console {
     // All callbacks registered
     void on_get_sw_status();
     void on_read_leds(uint8_t addr, uint8_t qty);
-    void on_write_leds(uint16_t data);
+    void on_write_leds_8(uint8_t addr, uint8_t qty, uint8_t, uint8_t data);
+    void on_write_leds_12(uint8_t addr, uint8_t qty, uint8_t, uint16_t data);
     void on_get_active_key();
     void on_beep();
     void on_custom(uint16_t leds);
+    void on_write_single_led(uint8_t index, uint16_t value);
 
     // All states to consider
     enum class state_t : uint8_t {
@@ -26,16 +28,25 @@ namespace console {
         DEVICE_37_READ_DISCRETE_INPUTS_from,
         DEVICE_37_READ_DISCRETE_INPUTS_from__ON_GET_SW_STATUS__CRC,
         RDY_TO_CALL__ON_GET_SW_STATUS,
+        DEVICE_37_WRITE_SINGLE_COIL,
+        DEVICE_37_WRITE_SINGLE_COIL_from,
+        DEVICE_37_WRITE_SINGLE_COIL_from__ON_WRITE_SINGLE_LED__CRC,
+        RDY_TO_CALL__ON_WRITE_SINGLE_LED,
         DEVICE_37_READ_COILS,
         DEVICE_37_READ_COILS_from,
         DEVICE_37_READ_COILS_from__ON_READ_LEDS__CRC,
         RDY_TO_CALL__ON_READ_LEDS,
         DEVICE_37_WRITE_MULTIPLE_COILS,
-        DEVICE_37_WRITE_MULTIPLE_COILS_from,
-        DEVICE_37_WRITE_MULTIPLE_COILS_from_qty,
-        DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount,
-        DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount__ON_WRITE_LEDS__CRC,
-        RDY_TO_CALL__ON_WRITE_LEDS,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start_qty,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount__ON_WRITE_LEDS_8__CRC,
+        RDY_TO_CALL__ON_WRITE_LEDS_8,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start_1,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount,
+        DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount__ON_WRITE_LEDS_12__CRC,
+        RDY_TO_CALL__ON_WRITE_LEDS_12,
         DEVICE_37_READ_INPUT_REGISTERS,
         DEVICE_37_READ_INPUT_REGISTERS_from,
         DEVICE_37_READ_INPUT_REGISTERS_from__ON_GET_ACTIVE_KEY__CRC,
@@ -53,7 +64,7 @@ namespace console {
         using error_t = asx::modbus::error_t;
 
         ///< Adjusted buffer to only receive the largest amount of data possible
-        inline static uint8_t buffer[12];
+        inline static uint8_t buffer[16];
         ///< Number of characters in the buffer
         inline static uint8_t cnt;
         ///< Number of characters to send
@@ -128,6 +139,8 @@ namespace console {
             case state_t::DEVICE_37:
                 if ( c == 2 ) {
                     state = state_t::DEVICE_37_READ_DISCRETE_INPUTS;
+                } else if ( c == 5 ) {
+                    state = state_t::DEVICE_37_WRITE_SINGLE_COIL;
                 } else if ( c == 1 ) {
                     state = state_t::DEVICE_37_READ_COILS;
                 } else if ( c == 15 ) {
@@ -152,7 +165,7 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_READ_DISCRETE_INPUTS_from:
@@ -164,12 +177,41 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_READ_DISCRETE_INPUTS_from__ON_GET_SW_STATUS__CRC:
                 if ( cnt == 8 ) {
                     state = state_t::RDY_TO_CALL__ON_GET_SW_STATUS;
+                }
+                break;
+            case state_t::DEVICE_37_WRITE_SINGLE_COIL:
+                if ( cnt == 4 ) {
+                    auto c = ntoh(cnt-2);
+
+                    if ( c <= 11 ) {
+                        state = state_t::DEVICE_37_WRITE_SINGLE_COIL_from;
+                    } else {
+                        error = error_t::illegal_data_value;
+                        state = state_t::ERROR;
+                    }
+                }
+                break;
+            case state_t::DEVICE_37_WRITE_SINGLE_COIL_from:
+                if ( cnt == 6 ) {
+                    auto c = ntoh(cnt-2);
+
+                    if ( c == 0xff00 || c == 0x0 ) {
+                        state = state_t::DEVICE_37_WRITE_SINGLE_COIL_from__ON_WRITE_SINGLE_LED__CRC;
+                    } else {
+                        error = error_t::illegal_data_value;
+                        state = state_t::ERROR;
+                    }
+                }
+                break;
+            case state_t::DEVICE_37_WRITE_SINGLE_COIL_from__ON_WRITE_SINGLE_LED__CRC:
+                if ( cnt == 8 ) {
+                    state = state_t::RDY_TO_CALL__ON_WRITE_SINGLE_LED;
                 }
                 break;
             case state_t::DEVICE_37_READ_COILS:
@@ -181,7 +223,7 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_READ_COILS_from:
@@ -193,7 +235,7 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_READ_COILS_from__ON_READ_LEDS__CRC:
@@ -205,42 +247,72 @@ namespace console {
                 if ( cnt == 4 ) {
                     auto c = ntoh(cnt-2);
 
-                    if ( c == 0 ) {
-                        state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from;
+                    if ( c <= 11 ) {
+                        state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start;
+                    } else if ( c <= 11 ) {
+                        state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1;
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start:
                 if ( cnt == 6 ) {
                     auto c = ntoh(cnt-2);
 
-                    if ( c == 16 ) {
-                        state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty;
+                    if ( c >= 1 and c <= 8 ) {
+                        state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty;
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty:
-                if ( c == 2 ) {
-                    state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount;
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty:
+                if ( c >= 1 and c <= 2 ) {
+                    state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount;
                 } else {
                     error = error_t::illegal_data_value;
                     state = state_t::ERROR;
                 }
                 break;
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount:
-                if ( cnt == 9 ) {
-                    state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount__ON_WRITE_LEDS__CRC;;
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount:
+                state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount__ON_WRITE_LEDS_8__CRC;
+                break;
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount__ON_WRITE_LEDS_8__CRC:
+                if ( cnt == 10 ) {
+                    state = state_t::RDY_TO_CALL__ON_WRITE_LEDS_8;
                 }
                 break;
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount__ON_WRITE_LEDS__CRC:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1:
+                if ( cnt == 6 ) {
+                    auto c = ntoh(cnt-2);
+
+                    if ( c >= 9 and c <= 12 ) {
+                        state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty;
+                    } else {
+                        error = error_t::illegal_data_value;
+                        state = state_t::ERROR;
+                    }
+                }
+                break;
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty:
+                if ( c == 2 ) {
+                    state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount;
+                } else {
+                    error = error_t::illegal_data_value;
+                    state = state_t::ERROR;
+                }
+                break;
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount:
+                if ( cnt == 9 ) {
+                    state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount__ON_WRITE_LEDS_12__CRC;
+                }
+                break;
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount__ON_WRITE_LEDS_12__CRC:
                 if ( cnt == 11 ) {
-                    state = state_t::RDY_TO_CALL__ON_WRITE_LEDS;
+                    state = state_t::RDY_TO_CALL__ON_WRITE_LEDS_12;
                 }
                 break;
             case state_t::DEVICE_37_READ_INPUT_REGISTERS:
@@ -252,7 +324,7 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_READ_INPUT_REGISTERS_from:
@@ -264,7 +336,7 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_READ_INPUT_REGISTERS_from__ON_GET_ACTIVE_KEY__CRC:
@@ -281,7 +353,7 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1:
@@ -293,7 +365,7 @@ namespace console {
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
-                    };
+                    }
                 }
                 break;
             case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_BEEP__CRC:
@@ -303,7 +375,7 @@ namespace console {
                 break;
             case state_t::DEVICE_37_CUSTOM:
                 if ( cnt == 4 ) {
-                    state = state_t::DEVICE_37_CUSTOM__ON_CUSTOM__CRC;;
+                    state = state_t::DEVICE_37_CUSTOM__ON_CUSTOM__CRC;
                 }
                 break;
             case state_t::DEVICE_37_CUSTOM__ON_CUSTOM__CRC:
@@ -312,8 +384,10 @@ namespace console {
                 }
                 break;
             case state_t::RDY_TO_CALL__ON_GET_SW_STATUS:
+            case state_t::RDY_TO_CALL__ON_WRITE_SINGLE_LED:
             case state_t::RDY_TO_CALL__ON_READ_LEDS:
-            case state_t::RDY_TO_CALL__ON_WRITE_LEDS:
+            case state_t::RDY_TO_CALL__ON_WRITE_LEDS_8:
+            case state_t::RDY_TO_CALL__ON_WRITE_LEDS_12:
             case state_t::RDY_TO_CALL__ON_GET_ACTIVE_KEY:
             case state_t::RDY_TO_CALL__ON_BEEP:
             case state_t::RDY_TO_CALL__ON_CUSTOM:
@@ -363,14 +437,21 @@ namespace console {
             case state_t::DEVICE_37_READ_DISCRETE_INPUTS:
             case state_t::DEVICE_37_READ_DISCRETE_INPUTS_from:
             case state_t::DEVICE_37_READ_DISCRETE_INPUTS_from__ON_GET_SW_STATUS__CRC:
+            case state_t::DEVICE_37_WRITE_SINGLE_COIL:
+            case state_t::DEVICE_37_WRITE_SINGLE_COIL_from:
+            case state_t::DEVICE_37_WRITE_SINGLE_COIL_from__ON_WRITE_SINGLE_LED__CRC:
             case state_t::DEVICE_37_READ_COILS:
             case state_t::DEVICE_37_READ_COILS_from:
             case state_t::DEVICE_37_READ_COILS_from__ON_READ_LEDS__CRC:
             case state_t::DEVICE_37_WRITE_MULTIPLE_COILS:
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from:
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty:
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount:
-            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_from_qty_bytecount__ON_WRITE_LEDS__CRC:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_qty_bytecount__ON_WRITE_LEDS_8__CRC:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount:
+            case state_t::DEVICE_37_WRITE_MULTIPLE_COILS_start_1_qty_bytecount__ON_WRITE_LEDS_12__CRC:
             case state_t::DEVICE_37_READ_INPUT_REGISTERS:
             case state_t::DEVICE_37_READ_INPUT_REGISTERS_from:
             case state_t::DEVICE_37_READ_INPUT_REGISTERS_from__ON_GET_ACTIVE_KEY__CRC:
@@ -388,11 +469,17 @@ namespace console {
             case state_t::RDY_TO_CALL__ON_GET_SW_STATUS:
                 on_get_sw_status();
                 break;
+            case state_t::RDY_TO_CALL__ON_WRITE_SINGLE_LED:
+                on_write_single_led(buffer[3], ntoh(4));
+                break;
             case state_t::RDY_TO_CALL__ON_READ_LEDS:
                 on_read_leds(buffer[3], buffer[5]);
                 break;
-            case state_t::RDY_TO_CALL__ON_WRITE_LEDS:
-                on_write_leds(ntoh(7));
+            case state_t::RDY_TO_CALL__ON_WRITE_LEDS_8:
+                on_write_leds_8(buffer[3], buffer[5], buffer[6], buffer[7]);
+                break;
+            case state_t::RDY_TO_CALL__ON_WRITE_LEDS_12:
+                on_write_leds_12(buffer[3], buffer[5], buffer[6], ntoh(7));
                 break;
             case state_t::RDY_TO_CALL__ON_GET_ACTIVE_KEY:
                 on_get_active_key();

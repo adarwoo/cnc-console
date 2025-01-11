@@ -46,16 +46,18 @@ from modbus_rtu_slave_rc import *  # Import everything from modbus_generator
 # 0x2000 Shift
 
 Modbus({
-    "buffer_size": 8,
+    "buffer_size": 16,
     "namespace": "console",
 
     "callbacks": {
         "on_get_sw_status" : [],
-        "on_read_leds"     : [(u8, "addr"), (u8, "qty")],        
-        "on_write_leds"    : [(u16, "data")],
+        "on_read_leds"     : [(u8, "addr"), (u8, "qty")],
+        "on_write_leds_8"  : [(u8, "addr"), (u8, "qty"), (u8), (u8, "data")],
+        "on_write_leds_12" : [(u8, "addr"), (u8, "qty"), (u8), (u16, "data")],
         "on_get_active_key": [],
         "on_beep"          : [],
-        "on_custom"        : [(u16, "leds")]
+        "on_custom"        : [(u16, "leds")],
+        "on_write_single_led" : [(u8, "index"), (u16, "value")],
     },
 
     "device@37": [
@@ -64,15 +66,25 @@ Modbus({
                                 u16(4, alias="qty"), # Byte count
                                 "on_get_sw_status"),
 
+        (WRITE_SINGLE_COIL,     u16(0, 11, alias="from"),
+                                u16([0xff00,0], alias="qty"),
+                                "on_write_single_led"),
+
         (READ_COILS,            u16(0, 11, alias="from"),
                                 u16(1, 12, alias="qty"),
                                 "on_read_leds"),
 
-        (WRITE_MULTIPLE_COILS,  u16(0, alias="from"),
-                                u16(16, alias="qty"),
+        (WRITE_MULTIPLE_COILS,  u16(0, 11, alias="start"),
+                                u16(1, 8, alias="qty"),
+                                u8(1, 2, alias="bytecount"),
+                                u8(alias="data"),
+                                "on_write_leds_8"),
+
+        (WRITE_MULTIPLE_COILS,  u16(0, 11, alias="start"),
+                                u16(9, 12, alias="qty"),
                                 u8(2, alias="bytecount"),
                                 u16(alias="data"),
-                                "on_write_leds"),
+                                "on_write_leds_12"),
 
         # Returns the active key
         (READ_INPUT_REGISTERS,  u16(0, alias="from"),

@@ -25,41 +25,54 @@ namespace console
         Datagram::pack<uint16_t>(mux::get_active_key_code());
     }
 
-    /// @brief Set the leds
-    /// @param data New leds values
-    void on_write_leds(uint16_t data) {
-        mux::set_leds(data);
-        Datagram::set_size(6);
-    }
+   void on_write_leds_8(uint8_t addr, uint8_t qty, uint8_t x, uint8_t data) {
+      if (qty > (12 - addr)) {
+         Datagram::reply_error(modbus::error_t::illegal_data_value);
+      } else {
+         for (uint8_t i=addr; i<addr+qty; ++i) {
+            mux::set_led(i, data>>i & 1);
+         }
+      }
+   }
 
-    void on_read_leds(uint8_t addr, uint8_t qty) {
-        if (qty > (12 - addr)) {
-            Datagram::reply_error(modbus::error_t::illegal_data_value);
-        } else {
-            uint16_t value = mux::get_leds();
+   void on_write_leds_12(uint8_t addr, uint8_t qty, uint8_t x, uint16_t data) {
+      if (qty > (12 - addr)) {
+         Datagram::reply_error(modbus::error_t::illegal_data_value);
+      } else {
+         on_write_leds_8(addr, 8, x, data>>8);
+         on_write_leds_8(addr+8, qty-8, x, data & 0xff);
+      }
+   }
 
-            // If address is 0, keep all, if 1 remove the first etc..
-            value >>= addr;
+   void on_write_single_led(uint8_t index, uint16_t value) {
+      //mux::set_led(index, value == 0xFF00);
+   }
 
-            // Mask to keep the count
-            value &= (1 << qty) - 1;
+   void on_read_leds(uint8_t addr, uint8_t qty) {
+       // Validate quantity against the available number of LEDs
+       if (qty > (12 - addr)) {
+           Datagram::reply_error(modbus::error_t::illegal_data_value);
+           return;
+       }
 
-            if (qty > 8) {
-                Datagram::pack<uint8_t>(2);
-                Datagram::pack<uint8_t>(value >> 8);
-                Datagram::pack<uint8_t>(value & 0xff);
-            } else {
-                Datagram::pack<uint8_t>(1);
-                Datagram::pack<uint8_t>(value & 0xff);
-            }
+       uint16_t value = 0;
 
-            if (qty > (3 - addr)) {
-                Datagram::reply_error(modbus::error_t::illegal_data_value);
-            } else {
-                Datagram::pack(value);
-            }
-        }
-    }
+       // Build the value by reading the LEDs
+       for (uint8_t i = 0; i < qty; ++i) {
+           value |= (mux::get_led(addr + i) ? 1 : 0) << i;
+       }
+
+       // Determine the size of the response
+       uint8_t byte_count = (qty > 8) ? 2 : 1;
+
+       Datagram::set_size(2); // Include the byte count itself in the size
+       Datagram::pack<uint8_t>(byte_count);
+       Datagram::pack<uint8_t>(value & 0xFF);
+
+       if (byte_count > 1) {
+           Datagram::pack<uint8_t>((value >> 8) & 0xFF);
+       }
+   }
 
     /// Custom package. Set the leds and return the push buttons and switches
     /// This is the most efficient transfer.
@@ -71,7 +84,7 @@ namespace console
         mux::set_leds(leds);
         Datagram::set_size(2);
         Datagram::pack(mux::get_switch_status());
-        Datagram::pack(mux::get_active_key_code());        
+        Datagram::pack(mux::get_active_key_code());
     }
 
     void on_beep() {

@@ -16,10 +16,8 @@ int main()
    console::mux::init();
    piezzo_init();
 
-#ifdef NDEBUG
    // Play some arcade tune from memory
-   piezzo_play(190, arcade_tune);
-#endif   
+   //piezzo_play(190, arcade_tune);
 
    // Run the reactor/scheduler
    asx::reactor::run();
