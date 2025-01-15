@@ -12,10 +12,15 @@ using namespace asx;
 namespace console
 {
     /// @brief  Read 4 bits for the switch
-    void on_get_sw_status() {
-        Datagram::set_size(2);
-        Datagram::pack<uint8_t>(1);
-        Datagram::pack(mux::get_switch_status());
+    void on_get_sw_status(uint8_t addr, uint8_t qty) {
+       // Validate quantity against the available number of LEDs
+       if (addr + qty > 4) {
+           Datagram::reply_error(modbus::error_t::illegal_data_value);
+           return;
+       }
+
+       Datagram::pack<uint8_t>(1);  // Number of bytes
+       Datagram::pack<uint8_t>((mux::get_switch_status() >> addr) & ((1 << qty) - 1));
     }
 
     /// @brief  Get the currently pushed active key
@@ -26,17 +31,20 @@ namespace console
     }
 
    void on_write_leds_8(uint8_t addr, uint8_t qty, uint8_t x, uint8_t data) {
-      if (qty > (12 - addr)) {
+      if (addr + qty > 12) {
          Datagram::reply_error(modbus::error_t::illegal_data_value);
       } else {
-         for (uint8_t i=addr; i<addr+qty; ++i) {
-            mux::set_led(i, data>>i & 1);
+         for (uint8_t i=addr; i < addr + qty; ++i) {
+            mux::set_led(i, data & 1);
+            data >>= 9;
          }
       }
+
+      Datagram::set_size(6);
    }
 
    void on_write_leds_12(uint8_t addr, uint8_t qty, uint8_t x, uint16_t data) {
-      if (qty > (12 - addr)) {
+      if (addr + qty > 12) {
          Datagram::reply_error(modbus::error_t::illegal_data_value);
       } else {
          on_write_leds_8(addr, 8, x, data>>8);
@@ -45,12 +53,12 @@ namespace console
    }
 
    void on_write_single_led(uint8_t index, uint16_t value) {
-      //mux::set_led(index, value == 0xFF00);
+      mux::set_led(index, value == 0xFF00);
    }
 
    void on_read_leds(uint8_t addr, uint8_t qty) {
        // Validate quantity against the available number of LEDs
-       if (qty > (12 - addr)) {
+       if (addr + qty > 12) {
            Datagram::reply_error(modbus::error_t::illegal_data_value);
            return;
        }

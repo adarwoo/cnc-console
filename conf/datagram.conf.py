@@ -50,7 +50,7 @@ Modbus({
     "namespace": "console",
 
     "callbacks": {
-        "on_get_sw_status" : [],
+        "on_get_sw_status" : [(u8, "addr"), (u8, "qty")],
         "on_read_leds"     : [(u8, "addr"), (u8, "qty")],
         "on_write_leds_8"  : [(u8, "addr"), (u8, "qty"), (u8), (u8, "data")],
         "on_write_leds_12" : [(u8, "addr"), (u8, "qty"), (u8), (u16, "data")],
@@ -62,8 +62,8 @@ Modbus({
 
     "device@37": [
         # Read the push button and switches state
-        (READ_DISCRETE_INPUTS,  u16(0, alias="from"),
-                                u16(4, alias="qty"), # Byte count
+        (READ_DISCRETE_INPUTS,  u16(0, 3, alias="from"),
+                                u16(1, 4, alias="qty"), # Byte count
                                 "on_get_sw_status"),
 
         (WRITE_SINGLE_COIL,     u16(0, 11, alias="from"),
@@ -76,7 +76,7 @@ Modbus({
 
         (WRITE_MULTIPLE_COILS,  u16(0, 11, alias="start"),
                                 u16(1, 8, alias="qty"),
-                                u8(1, 2, alias="bytecount"),
+                                u8(1, alias="bytecount"),
                                 u8(alias="data"),
                                 "on_write_leds_8"),
 

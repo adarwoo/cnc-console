@@ -21,7 +21,6 @@ namespace console {
       struct start {};
       struct i2c_ready {};
       struct polling {};
-      struct stuck {};
 
       static constexpr auto leds_per_side = uint8_t{6};
       static constexpr auto io_msk = uint8_t{0b00111111};
@@ -60,10 +59,6 @@ namespace console {
                , "set_right"_s     + event<i2c_ready> / [] {iomux_left.read<1>(react_on_i2c_ready); }                       = "get_left"_s
                , "get_left"_s      + event<i2c_ready> / [] {iomux_right.read<1>(react_on_i2c_ready); }                      = "get_right"_s
                , "get_right"_s     + event<i2c_ready>                                                                       = "wait_for_poll"_s
-               , "set_left"_s      + event<stuck>                                                                           = "wait_for_poll"_s
-               , "set_right"_s     + event<stuck>                                                                           = "wait_for_poll"_s
-               , "get_left"_s      + event<stuck>                                                                           = "wait_for_poll"_s
-               , "get_right"_s     + event<stuck>                                                                           = "wait_for_poll"_s
             );
          }
       };
@@ -83,14 +78,12 @@ namespace console {
 
       auto on_i2c_ready(status_code_t code) {
          alert_and_stop_if(code != status_code_t::STATUS_OK);
-         using namespace asx::ioport;
-         Pin(PinDef(A, 6)).clear();
 
          // If reading - integrate the keys
          if ( i2c_sequencer.is("get_left"_s) ) {
-            integrate_keys(0, iomux_left.get_value<1>() & io_msk);
+            integrate_keys(0, iomux_left.get_value<uint8_t>() & io_msk);
          } else if ( i2c_sequencer.is("get_right"_s) ) {
-            integrate_keys(1, iomux_right.get_value<1>() & io_msk);
+            integrate_keys(1, iomux_right.get_value<uint8_t>() & io_msk);
 
             // Regroup the keys on 1 bytes 6 left + door + shift
             bool shift = integrator[1].current & 0b010000;
@@ -126,22 +119,11 @@ namespace console {
       }
 
       auto on_poll_input() {
-         static bool is_stuck = false;
-
-         if ( not i2c_sequencer.is("wait_for_poll"_s) ) {
-            if ( is_stuck ) {
-               i2c_sequencer.process_event( stuck{} );
-               is_stuck = false;
-            } else {
-               is_stuck = true;
-            }
-         }
-
          i2c_sequencer.process_event(polling{});
       }
 
       void init() {
-         react_on_i2c_ready = reactor::bind(on_i2c_ready, reactor::high);
+         react_on_i2c_ready = reactor::bind(on_i2c_ready, reactor::low);
          react_on_poll = reactor::bind(on_poll_input);
 
          i2c::Master::init(400_KHz);
