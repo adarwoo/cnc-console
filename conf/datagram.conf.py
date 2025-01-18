@@ -46,7 +46,7 @@ from modbus_rtu_slave_rc import *  # Import everything from modbus_generator
 # 0x2000 Shift
 
 Modbus({
-    "buffer_size": 16,
+    "buffer_size": 255,
     "namespace": "console",
 
     "callbacks": {
@@ -55,9 +55,10 @@ Modbus({
         "on_write_leds_8"  : [(u8, "addr"), (u8, "qty"), (u8), (u8, "data")],
         "on_write_leds_12" : [(u8, "addr"), (u8, "qty"), (u8), (u16, "data")],
         "on_get_active_key": [],
-        "on_beep"          : [],
+        "on_write_holding" : [(u16), (u16)],
         "on_custom"        : [(u16, "leds")],
         "on_write_single_led" : [(u8, "index"), (u16, "value")],
+        "on_read_holding"  : [(u16), (u16)],
     },
 
     "device@37": [
@@ -91,7 +92,9 @@ Modbus({
                                 u16(1, alias="qty"),
                                 "on_get_active_key"),
 
-        (WRITE_SINGLE_REGISTER, u16(1), u16(0,1), "on_beep"),
+        (READ_HOLDING_REGISTERS, u16(), u16(1,125), "on_read_holding"),
+
+        (WRITE_SINGLE_REGISTER, u16(), u16(), "on_write_holding"),
 
         (CUSTOM,                u16(alias="leds"), "on_custom"),
     ]

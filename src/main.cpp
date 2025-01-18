@@ -17,7 +17,7 @@ int main()
    piezzo_init();
 
    // Play some arcade tune from memory
-   //piezzo_play(190, arcade_tune);
+   piezzo_play(190, arcade_tune);
 
    // Run the reactor/scheduler
    asx::reactor::run();

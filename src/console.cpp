@@ -95,7 +95,32 @@ namespace console
         Datagram::pack(mux::get_active_key_code());
     }
 
-    void on_beep() {
-        piezzo_play(150, "B4");
+
+   void on_read_holding(uint16_t addr, uint16_t qty) {
+      Datagram::set_size(2);
+      Datagram::pack<uint8_t>(qty * 2);
+      for (uint16_t i=addr; i<addr+qty; ++i) {
+         uint16_t value = 0;
+         if ( i == 10 ) {
+            value = 99;
+         }
+         Datagram::pack<uint16_t>(value);
+      }
+   }
+
+    void on_write_holding(uint16_t addr, uint16_t value) {
+      if ( addr == 10 ) {
+         switch(value) {
+            case 0: break;
+            case 1: piezzo_play(150, "B4"); break;
+            case 2: piezzo_play(150, "C4"); break;
+            case 3: piezzo_play(150, "D4"); break;
+            default:
+               Datagram::reply_error(modbus::error_t::illegal_data_value);
+               break;
+         }
+      } else {
+         Datagram::reply_error(modbus::error_t::illegal_data_value);
+      }
     }
 }

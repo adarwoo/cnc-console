@@ -14,9 +14,10 @@ namespace console {
     void on_write_leds_8(uint8_t addr, uint8_t qty, uint8_t, uint8_t data);
     void on_write_leds_12(uint8_t addr, uint8_t qty, uint8_t, uint16_t data);
     void on_get_active_key();
-    void on_beep();
+    void on_write_holding(uint16_t, uint16_t);
     void on_custom(uint16_t leds);
     void on_write_single_led(uint8_t index, uint16_t value);
+    void on_read_holding(uint16_t, uint16_t);
 
     // All states to consider
     enum class state_t : uint8_t {
@@ -50,10 +51,14 @@ namespace console {
         DEVICE_37_READ_INPUT_REGISTERS_from,
         DEVICE_37_READ_INPUT_REGISTERS_from__ON_GET_ACTIVE_KEY__CRC,
         RDY_TO_CALL__ON_GET_ACTIVE_KEY,
+        DEVICE_37_READ_HOLDING_REGISTERS,
+        DEVICE_37_READ_HOLDING_REGISTERS_1,
+        DEVICE_37_READ_HOLDING_REGISTERS_1__ON_READ_HOLDING__CRC,
+        RDY_TO_CALL__ON_READ_HOLDING,
         DEVICE_37_WRITE_SINGLE_REGISTER,
         DEVICE_37_WRITE_SINGLE_REGISTER_1,
-        DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_BEEP__CRC,
-        RDY_TO_CALL__ON_BEEP,
+        DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_WRITE_HOLDING__CRC,
+        RDY_TO_CALL__ON_WRITE_HOLDING,
         DEVICE_37_CUSTOM,
         DEVICE_37_CUSTOM__ON_CUSTOM__CRC,
         RDY_TO_CALL__ON_CUSTOM
@@ -63,7 +68,7 @@ namespace console {
         using error_t = asx::modbus::error_t;
 
         ///< Adjusted buffer to only receive the largest amount of data possible
-        inline static uint8_t buffer[16];
+        inline static uint8_t buffer[255];
         ///< Number of characters in the buffer
         inline static uint8_t cnt;
         ///< Number of characters to send
@@ -146,6 +151,8 @@ namespace console {
                     state = state_t::DEVICE_37_WRITE_MULTIPLE_COILS;
                 } else if ( c == 4 ) {
                     state = state_t::DEVICE_37_READ_INPUT_REGISTERS;
+                } else if ( c == 3 ) {
+                    state = state_t::DEVICE_37_READ_HOLDING_REGISTERS;
                 } else if ( c == 6 ) {
                     state = state_t::DEVICE_37_WRITE_SINGLE_REGISTER;
                 } else if ( c == 101 ) {
@@ -331,33 +338,41 @@ namespace console {
                     state = state_t::RDY_TO_CALL__ON_GET_ACTIVE_KEY;
                 }
                 break;
-            case state_t::DEVICE_37_WRITE_SINGLE_REGISTER:
+            case state_t::DEVICE_37_READ_HOLDING_REGISTERS:
                 if ( cnt == 4 ) {
+                    state = state_t::DEVICE_37_READ_HOLDING_REGISTERS_1;
+                }
+                break;
+            case state_t::DEVICE_37_READ_HOLDING_REGISTERS_1:
+                if ( cnt == 6 ) {
                     auto c = ntoh(cnt-2);
 
-                    if ( c == 1 ) {
-                        state = state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1;
+                    if ( c >= 1 and c <= 125 ) {
+                        state = state_t::DEVICE_37_READ_HOLDING_REGISTERS_1__ON_READ_HOLDING__CRC;
                     } else {
                         error = error_t::illegal_data_value;
                         state = state_t::ERROR;
                     }
+                }
+                break;
+            case state_t::DEVICE_37_READ_HOLDING_REGISTERS_1__ON_READ_HOLDING__CRC:
+                if ( cnt == 8 ) {
+                    state = state_t::RDY_TO_CALL__ON_READ_HOLDING;
+                }
+                break;
+            case state_t::DEVICE_37_WRITE_SINGLE_REGISTER:
+                if ( cnt == 4 ) {
+                    state = state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1;
                 }
                 break;
             case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1:
                 if ( cnt == 6 ) {
-                    auto c = ntoh(cnt-2);
-
-                    if ( c <= 1 ) {
-                        state = state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_BEEP__CRC;
-                    } else {
-                        error = error_t::illegal_data_value;
-                        state = state_t::ERROR;
-                    }
+                    state = state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_WRITE_HOLDING__CRC;
                 }
                 break;
-            case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_BEEP__CRC:
+            case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_WRITE_HOLDING__CRC:
                 if ( cnt == 8 ) {
-                    state = state_t::RDY_TO_CALL__ON_BEEP;
+                    state = state_t::RDY_TO_CALL__ON_WRITE_HOLDING;
                 }
                 break;
             case state_t::DEVICE_37_CUSTOM:
@@ -376,7 +391,8 @@ namespace console {
             case state_t::RDY_TO_CALL__ON_WRITE_LEDS_8:
             case state_t::RDY_TO_CALL__ON_WRITE_LEDS_12:
             case state_t::RDY_TO_CALL__ON_GET_ACTIVE_KEY:
-            case state_t::RDY_TO_CALL__ON_BEEP:
+            case state_t::RDY_TO_CALL__ON_READ_HOLDING:
+            case state_t::RDY_TO_CALL__ON_WRITE_HOLDING:
             case state_t::RDY_TO_CALL__ON_CUSTOM:
             default:
                 error = error_t::illegal_data_value;
@@ -441,9 +457,12 @@ namespace console {
             case state_t::DEVICE_37_READ_INPUT_REGISTERS:
             case state_t::DEVICE_37_READ_INPUT_REGISTERS_from:
             case state_t::DEVICE_37_READ_INPUT_REGISTERS_from__ON_GET_ACTIVE_KEY__CRC:
+            case state_t::DEVICE_37_READ_HOLDING_REGISTERS:
+            case state_t::DEVICE_37_READ_HOLDING_REGISTERS_1:
+            case state_t::DEVICE_37_READ_HOLDING_REGISTERS_1__ON_READ_HOLDING__CRC:
             case state_t::DEVICE_37_WRITE_SINGLE_REGISTER:
             case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1:
-            case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_BEEP__CRC:
+            case state_t::DEVICE_37_WRITE_SINGLE_REGISTER_1__ON_WRITE_HOLDING__CRC:
             case state_t::DEVICE_37_CUSTOM:
             case state_t::DEVICE_37_CUSTOM__ON_CUSTOM__CRC:
                 error = error_t::illegal_data_value;
@@ -470,8 +489,11 @@ namespace console {
             case state_t::RDY_TO_CALL__ON_GET_ACTIVE_KEY:
                 on_get_active_key();
                 break;
-            case state_t::RDY_TO_CALL__ON_BEEP:
-                on_beep();
+            case state_t::RDY_TO_CALL__ON_READ_HOLDING:
+                on_read_holding(ntoh(2), ntoh(4));
+                break;
+            case state_t::RDY_TO_CALL__ON_WRITE_HOLDING:
+                on_write_holding(ntoh(2), ntoh(4));
                 break;
             case state_t::RDY_TO_CALL__ON_CUSTOM:
                 on_custom(ntoh(2));

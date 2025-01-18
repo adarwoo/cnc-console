@@ -24,6 +24,9 @@ namespace console {
 
       static constexpr auto leds_per_side = uint8_t{6};
       static constexpr auto io_msk = uint8_t{0b00111111};
+      static constexpr auto shift_msk = uint8_t{1U << 5};
+      static constexpr auto door_msk = uint8_t{1U << 4};
+      static constexpr auto pol_right_msk = uint8_t{0b1111}; // Flip the switch
 
       /// @brief Holds the current value for the LEDs
       uint8_t frame_buffer[] = {io_msk, io_msk};
@@ -51,8 +54,8 @@ namespace console {
                , "init1"_s         + event<i2c_ready> / [] {iomux_right.set_value<0>(io_msk, react_on_i2c_ready); }         = "init2"_s
                , "init2"_s         + event<i2c_ready> / [] {iomux_left.set_dir<0>(~io_msk, react_on_i2c_ready); }           = "init3"_s
                , "init3"_s         + event<i2c_ready> / [] {iomux_right.set_dir<0>(~io_msk, react_on_i2c_ready); }          = "init4"_s
-               , "init4"_s         + event<i2c_ready> / [] {iomux_left.set_pol<1>(io_msk, react_on_i2c_ready); }            = "init5"_s
-               , "init5"_s         + event<i2c_ready> / [] {iomux_right.set_pol<1>(io_msk, react_on_i2c_ready);
+               , "init4"_s         + event<i2c_ready> / [] {iomux_left.set_pol<1>(0, react_on_i2c_ready); }                 = "init5"_s
+               , "init5"_s         + event<i2c_ready> / [] {iomux_right.set_pol<1>(pol_right_msk, react_on_i2c_ready);
                                                             react_on_poll.repeat(2ms); }                                    = "wait_for_poll"_s
                , "wait_for_poll"_s + event<polling>   / [] {iomux_left.set_value<0>(frame_buffer[0], react_on_i2c_ready); } = "set_left"_s
                , "set_left"_s      + event<i2c_ready> / [] {iomux_right.set_value<0>(frame_buffer[1], react_on_i2c_ready); }= "set_right"_s
@@ -86,11 +89,11 @@ namespace console {
             integrate_keys(1, iomux_right.get_value<uint8_t>() & io_msk);
 
             // Regroup the keys on 1 bytes 6 left + door + shift
-            bool shift = integrator[1].current & 0b010000;
-            bool door = integrator[1].current & 0b100000;
+            bool shift = integrator[1].current & shift_msk;
+            bool door = integrator[1].current & door_msk;
 
             // Create a view of all the push buttons (not accounting for the shift key)
-            uint8_t all_keys = (integrator[0].current & 0b111111) << 1 | (door?1:0);
+            uint8_t all_keys = integrator[0].current | (door?0b1000000:0);
 
             // Calculate active keys - factoring the shift key
             if ( all_keys != 0 ) {
@@ -99,7 +102,7 @@ namespace console {
                } else if ( active_key == 0 ) {
                   // Make sure only 1 bits set
                   if ( (all_keys & (all_keys - 1)) == 0 ) {
-                     active_key = __builtin_ctzl(all_keys) + (shift?6:0) + 1;
+                     active_key = __builtin_ctzl(all_keys) + (shift?7:0) + 1;
                   }
                } else {
                   // The key remains valid if it is pushed (ignore the shift)
