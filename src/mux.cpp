@@ -43,28 +43,32 @@ namespace console {
       auto iomux_left = PCA9555(0);
       auto iomux_right = PCA9555(1);
 
-      reactor::Handle react_on_i2c_ready;
+      // Handlers
       reactor::Handle react_on_poll;
+      void on_i2c_ready(status_code_t code);
 
       struct InitPCA {
          auto operator()() {
 
             return make_transition_table(
-               * "idle"_s           + event<start>    / [] {iomux_left.set_value<0>(io_msk, react_on_i2c_ready); }          = "init1"_s
-               , "init1"_s         + event<i2c_ready> / [] {iomux_right.set_value<0>(io_msk, react_on_i2c_ready); }         = "init2"_s
-               , "init2"_s         + event<i2c_ready> / [] {iomux_left.set_dir<0>(~io_msk, react_on_i2c_ready); }           = "init3"_s
-               , "init3"_s         + event<i2c_ready> / [] {iomux_right.set_dir<0>(~io_msk, react_on_i2c_ready); }          = "init4"_s
-               , "init4"_s         + event<i2c_ready> / [] {iomux_left.set_pol<1>(0, react_on_i2c_ready); }                 = "init5"_s
-               , "init5"_s         + event<i2c_ready> / [] {iomux_right.set_pol<1>(pol_right_msk, react_on_i2c_ready);
-                                                            react_on_poll.repeat(2ms); }                                    = "wait_for_poll"_s
-               , "wait_for_poll"_s + event<polling>   / [] {iomux_left.set_value<0>(frame_buffer[0], react_on_i2c_ready); } = "set_left"_s
-               , "set_left"_s      + event<i2c_ready> / [] {iomux_right.set_value<0>(frame_buffer[1], react_on_i2c_ready); }= "set_right"_s
-               , "set_right"_s     + event<i2c_ready> / [] {iomux_left.read<1>(react_on_i2c_ready); }                       = "get_left"_s
-               , "get_left"_s      + event<i2c_ready> / [] {iomux_right.read<1>(react_on_i2c_ready); }                      = "get_right"_s
-               , "get_right"_s     + event<i2c_ready>                                                                       = "wait_for_poll"_s
+               * "idle"_s          + event<start>     / [] {iomux_left.set_value<0>(io_msk, on_i2c_ready); }          = "init1"_s
+               , "init1"_s         + event<i2c_ready> / [] {iomux_right.set_value<0>(io_msk, on_i2c_ready); }         = "init2"_s
+               , "init2"_s         + event<i2c_ready> / [] {iomux_left.set_dir<0>(~io_msk, on_i2c_ready); }           = "init3"_s
+               , "init3"_s         + event<i2c_ready> / [] {iomux_right.set_dir<0>(~io_msk, on_i2c_ready); }          = "init4"_s
+               , "init4"_s         + event<i2c_ready> / [] {iomux_left.set_pol<1>(0, on_i2c_ready); }                 = "init5"_s
+               , "init5"_s         + event<i2c_ready> / [] {iomux_right.set_pol<1>(pol_right_msk, on_i2c_ready);
+                                                            react_on_poll.repeat(2ms); }                              = "wait_for_poll"_s
+               , "wait_for_poll"_s + event<polling>   / [] {iomux_left.set_value<0>(frame_buffer[0], on_i2c_ready); } = "set_left"_s
+               , "set_left"_s      + event<i2c_ready> / [] {iomux_right.set_value<0>(frame_buffer[1], on_i2c_ready); }= "set_right"_s
+               , "set_right"_s     + event<i2c_ready> / [] {iomux_left.read<1>(on_i2c_ready); }                       = "get_left"_s
+               , "get_left"_s      + event<i2c_ready> / [] {iomux_right.read<1>(on_i2c_ready); }                      = "get_right"_s
+               , "get_right"_s     + event<i2c_ready>                                                                 = "wait_for_poll"_s
             );
          }
       };
+
+      //
+      i2c::Master::chain()
 
       sm<InitPCA> i2c_sequencer;
 
@@ -79,7 +83,7 @@ namespace console {
          i.current = (i.current & debounced_on) | debounced_off;
       }
 
-      auto on_i2c_ready(status_code_t code) {
+      void on_i2c_ready(status_code_t code) {
          alert_and_stop_if(code != status_code_t::STATUS_OK);
 
          // If reading - integrate the keys
@@ -126,7 +130,6 @@ namespace console {
       }
 
       void init() {
-         react_on_i2c_ready = reactor::bind(on_i2c_ready, reactor::low);
          react_on_poll = reactor::bind(on_poll_input);
 
          i2c::Master::init(400_KHz);

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from modbus_rtu_slave_rc import *  # Import everything from modbus_generator
+from modbus_rtu_rc import *  # Import everything from modbus_generator
 
 # Coils = LED+ (write multiple only)
 # Discrete inputs = Switch state
